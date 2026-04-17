@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>COMPARUM</title>
+<style>
+:root{--bg:#0b1220;--panel:#18243b;--panel2:#22314d;--line:#5aa4ff;--ok:#16a34a;--text:#e5eefc;--muted:#a9bdd7;}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(180deg,#0b1220,#101b31);color:var(--text)}
+.wrap{max-width:1500px;margin:0 auto;padding:24px 28px 40px}h1{margin:0;font-size:48px;letter-spacing:.5px}p{color:var(--muted);font-size:22px;margin:10px 0 0}
+.box{margin-top:26px;border:2px dashed var(--line);border-radius:18px;padding:26px;background:rgba(20,33,58,.35)}
+.drop{margin:22px auto 18px;min-height:260px;border:2px dashed rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.03);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+.card{border:2px solid #12a87a;border-radius:14px;background:#22314d;padding:18px 20px;margin-top:22px}
+.row{display:flex;gap:12px;align-items:center}.title{font-size:28px;color:#4ea0ff;font-weight:700;text-align:center;margin:0 0 10px}.small{color:#c6d4ea;text-align:center}
+.btn{display:inline-block;padding:10px 16px;border-radius:10px;background:#1d4ed8;color:white;text-decoration:none;font-weight:700;margin-top:10px}
+.code{white-space:pre-wrap;background:#0b1220;border-radius:10px;padding:14px;overflow:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>COMPARUM</h1>
+  <p>Comparativa Inteligente de Cotizaciones</p>
+  <div class="box">
+    <div class="title">Análisis Inteligente de Cotizaciones</div>
+    <div class="small">Sube archivos PDF, Excel, imágenes o fotos de cotizaciones. La IA extraerá automáticamente precios, cantidades y actualizará el análisis completo.</div>
+    <div class="drop">Arrastra archivos aquí o haz clic para seleccionar<br/>PDF, Excel (.xls, .xlsx), Imágenes (.jpg, .png), TXT, CSV</div>
+    <div class="card">
+      <div class="row"><strong>✓ Análisis Completado por IA</strong></div>
+      <div class="code">Listo para conectar con la API /api/analizar-cotizacion.</div>
+      <a class="btn" href="/api/analizar-cotizacion">Probar API</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>
