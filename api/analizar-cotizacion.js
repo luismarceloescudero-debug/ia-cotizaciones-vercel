@@ -26,10 +26,7 @@ export default async function handler(req, res) {
 
     const uploaded = files.file || files.files || Object.values(files)[0];
     const fileObj = Array.isArray(uploaded) ? uploaded[0] : uploaded;
-
-    if (!fileObj) {
-      return res.status(400).json({ error: "No se recibió ningún archivo" });
-    }
+    if (!fileObj) return res.status(400).json({ error: "No se recibió ningún archivo" });
 
     const buffer = await fs.promises.readFile(fileObj.filepath);
     const parsed = await pdfParse(buffer);
@@ -39,32 +36,10 @@ export default async function handler(req, res) {
       model: "llama-3.3-70b-versatile",
       temperature: 0.1,
       messages: [
-        {
-          role: "system",
-          content: "Responde SOLO con JSON válido, sin markdown ni texto extra.",
-        },
+        { role: "system", content: "Responde solo con JSON válido, sin markdown ni texto extra." },
         {
           role: "user",
-          content: `Devuelve un JSON con este formato:
-{
-  "key":"",
-  "razonSocial":"",
-  "nombreFantasia":"",
-  "location":"",
-  "phone":"",
-  "itemsCotizados":0,
-  "totalItems":17,
-  "faltantes":[],
-  "calidad":"",
-  "marca":"",
-  "precio":0,
-  "cotiza":[],
-  "isWinner":false,
-  "pendientesProyecto":[]
-}
-
-TEXTO:
-${text}`,
+          content: `Devuelve un JSON con key, razonSocial, nombreFantasia, location, phone, itemsCotizados, totalItems, faltantes, calidad, marca, precio, cotiza, isWinner, pendientesProyecto.\n\nTEXTO:\n${text}`,
         },
       ],
     });
