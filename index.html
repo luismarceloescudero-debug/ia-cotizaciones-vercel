@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>COMPARUM</title>
+  <style>
+    :root{
+      --bg:#081226;
+      --bg2:#0d1a36;
+      --panel:#101d39;
+      --panel-2:#0c1730;
+      --line:#5ea2ff;
+      --text:#eef4ff;
+      --muted:#a9b7d3;
+      --ok:#22c55e;
+      --shadow:0 18px 45px rgba(0,0,0,.34);
+      --r:20px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at top,#10214b 0%,var(--bg) 55%);color:var(--text)}
+    .wrap{max-width:1280px;margin:auto;padding:22px}
+    .brand{font-size:30px;font-weight:900;letter-spacing:.5px;margin:0 0 6px}
+    .sub{margin:0 0 18px;color:var(--muted)}
+    .shell{border:2px dashed var(--line);border-radius:26px;padding:22px;background:rgba(10,20,43,.72);box-shadow:var(--shadow)}
+    .panel{background:rgba(14,25,50,.95);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px}
+    .upload{border:2px dashed rgba(255,255,255,.12);border-radius:18px;padding:34px 18px;text-align:center;margin-bottom:18px;background:rgba(8,15,31,.35)}
+    .upload h2{margin:0 0 10px;font-size:24px}
+    .small{font-size:13px;color:var(--muted)}
+    .btn{border:0;background:#e8eefc;color:#0b1730;font-weight:800;padding:11px 16px;border-radius:12px;cursor:pointer}
+    .btn:hover{filter:brightness(1.05)}
+    .row{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+    .stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);padding:14px;border-radius:14px}
+    .stat .k{font-size:12px;color:var(--muted);display:block}
+    .stat .v{font-size:24px;font-weight:900;margin-top:4px}
+    pre{margin:0;background:#071122;border-radius:16px;padding:18px;color:#dce8ff;min-height:430px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+    .side h3{margin:0 0 10px;font-size:18px}
+    ul{margin:0;padding-left:18px;color:var(--muted);line-height:1.7}
+    .ok{color:#86efac}
+    .footer-note{margin-top:12px;color:var(--muted);font-size:12px}
+    @media (max-width: 980px){.row{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.wrap{padding:14px}.brand{font-size:26px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="brand">COMPARUM</h1>
+    <p class="sub">Comparativa Inteligente de Cotizaciones</p>
+
+    <div class="shell">
+      <h2 style="margin:0 0 18px;font-size:22px">Análisis Inteligente de Cotizaciones</h2>
+
+      <div class="upload">
+        <div style="font-size:28px;font-weight:800;margin-bottom:8px">Seleccioná un PDF o imagen</div>
+        <input id="fileInput" type="file" accept=".pdf,.jpg,.jpeg,.png" />
+        <div style="height:12px"></div>
+        <button id="analyzeBtn" class="btn">Enviar a analizar</button>
+        <div class="footer-note">Soporta PDF con texto, PDF escaneado y JPG/PNG vía OCR.</div>
+      </div>
+
+      <div class="row">
+        <div>
+          <div class="stats">
+            <div class="stat"><span class="k">Fuente</span><span id="src" class="v">-</span></div>
+            <div class="stat"><span class="k">Texto extraído</span><span id="chars" class="v">-</span></div>
+            <div class="stat"><span class="k">Ítems</span><span id="items" class="v">-</span></div>
+          </div>
+          <div class="panel">
+            <div style="font-weight:800;margin-bottom:12px">✓ Análisis Completado por IA</div>
+            <pre id="result">Esperando archivo...</pre>
+          </div>
+        </div>
+
+        <div class="panel side">
+          <h3>Build final de prueba</h3>
+          <ul>
+            <li>Lee PDF con texto embebido.</li>
+            <li>Si no encuentra texto, usa OCR.</li>
+            <li>Mantiene salida JSON compatible con tu flujo actual.</li>
+            <li>Devuelve <span class="ok">source</span>, <span class="ok">extractedChars</span> e <span class="ok">itemsCotizados</span>.</li>
+          </ul>
+          <div class="footer-note">Después ajustamos normalización, matching y scoring.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const result = document.getElementById('result');
+    const src = document.getElementById('src');
+    const chars = document.getElementById('chars');
+    const items = document.getElementById('items');
+
+    analyzeBtn.addEventListener('click', async () => {
+      const file = fileInput.files[0];
+      if (!file) {
+        result.textContent = 'Seleccioná un archivo.';
+        return;
+      }
+
+      result.textContent = 'Procesando...';
+      src.textContent = '-';
+      chars.textContent = '-';
+      items.textContent = '-';
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('/api/analizar-cotizacion', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        result.textContent = JSON.stringify(data.parsed, null, 2);
+        src.textContent = data?.debug?.source || '-';
+        chars.textContent = String(data?.debug?.extractedChars ?? '-');
+        items.textContent = String(data?.parsed?.itemsCotizados ?? '-');
+      } catch (error) {
+        result.textContent = 'Error: ' + String(error.message || error);
+      }
+    });
+  </script>
+</body>
+</html>
