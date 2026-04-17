@@ -1,4 +1,5 @@
 import pdf from 'pdf-parse';
+import Tesseract from 'tesseract.js';
 
 export const config = {
   api: {
@@ -82,6 +83,20 @@ function buildParsed(text) {
   };
 }
 
+async function tryPdfText(raw) {
+  const str = raw.toString('latin1');
+  const pdfStart = str.indexOf('%PDF');
+  if (pdfStart === -1) return '';
+  const pdfBuffer = raw.subarray(pdfStart);
+  const data = await pdf(pdfBuffer);
+  return (data && data.text ? data.text : '').trim();
+}
+
+async function tryOCR(raw) {
+  const result = await Tesseract.recognize(raw, 'spa+eng');
+  return result?.data?.text?.trim() || '';
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(200).json({ ok: true, mensaje: 'function viva' });
@@ -89,21 +104,26 @@ export default async function handler(req, res) {
 
   try {
     const raw = await readRawBody(req);
-    const str = raw.toString('latin1');
+    let text = '';
+    let source = 'none';
 
-    const pdfStart = str.indexOf('%PDF');
-    if (pdfStart === -1) {
-      return res.status(200).json({ ok: true, parsed: buildParsed('') });
+    try {
+      text = await tryPdfText(raw);
+      if (text) source = 'pdf-text';
+    } catch {}
+
+    if (!text) {
+      try {
+        text = await tryOCR(raw);
+        if (text) source = 'ocr';
+      } catch {}
     }
-
-    const pdfBuffer = raw.subarray(pdfStart);
-    const data = await pdf(pdfBuffer);
-    const text = (data && data.text ? data.text : '').trim();
 
     return res.status(200).json({
       ok: true,
       parsed: buildParsed(text),
       debug: {
+        source,
         extractedChars: text.length
       }
     });
