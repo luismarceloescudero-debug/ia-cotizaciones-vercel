@@ -53,28 +53,27 @@ export default async function handler(req, res) {
 
     const systemPrompt = `
 Eres un analista de compras para Hormiserv.
-
-A partir del texto de una cotización de materiales eléctricos debes devolver UN SOLO JSON válido con esta forma:
+Devuelve UN SOLO JSON válido con esta forma:
 {
-  "key": "string-corta-sin-espacios",
-  "razonSocial": "nombre legal proveedor",
-  "nombreFantasia": "nombre comercial",
-  "location": "ciudad, provincia",
-  "phone": "telefono o whatsapp principal",
-  "itemsCotizados": numero,
-  "totalItems": 17,
-  "faltantes": [numeros],
-  "calidad": "Premium | Standard-Plus | Standard",
-  "marca": "texto corto de marcas principales",
-  "precio": numeroTotalEnPesos,
-  "cotiza": [numeros],
-  "isWinner": false,
-  "pendientesProyecto":[2]
+  "key":"string-corta-sin-espacios",
+  "razonSocial":"nombre legal proveedor",
+  "nombreFantasia":"nombre comercial",
+  "location":"ciudad, provincia",
+  "phone":"telefono o whatsapp principal",
+  "itemsCotizados":numero,
+  "totalItems":17,
+  "faltantes":[numeros],
+  "calidad":"Premium | Standard-Plus | Standard",
+  "marca":"texto corto de marcas principales",
+  "precio":numeroTotalEnPesos,
+  "cotiza":[numeros],
+  "isWinner":false,
+  "pendientesProyecto":[1]
 }
 
 Reglas:
-- Considera equivalentes: relé diferencial / módulo diferencial / interruptor diferencial.
-- Los kits de jabalina pueden venir desglosados; considéralos como el ítem 15.
+- Considera equivalentes relé diferencial / módulo diferencial / interruptor diferencial.
+- Los kits de jabalina desglosados cuentan como ítem 15.
 - Si no aparece un dato, usa cadena vacía o lista vacía.
 - No incluyas texto adicional ni markdown.
 `.trim();
@@ -94,9 +93,7 @@ Reglas:
     const raw = completion.choices?.?.message?.content || "";
     const data = safeJson(raw);
 
-    if (!data.key) {
-      data.key = "proveedor";
-    }
+    if (!data.key) data.key = "proveedor";
 
     return res.status(200).json(data);
   } catch (err) {
