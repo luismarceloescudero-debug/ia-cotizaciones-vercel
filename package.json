@@ -8,6 +8,7 @@
     "start": "vercel dev"
   },
   "dependencies": {
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "tesseract.js": "^5.1.1"
   }
 }
