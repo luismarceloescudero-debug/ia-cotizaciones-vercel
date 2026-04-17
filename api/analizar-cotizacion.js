@@ -4,30 +4,14 @@ import fs from "fs";
 import pdfParse from "pdf-parse";
 
 export const config = {
-  api: {
-    bodyParser: false,
-  },
+  api: { bodyParser: false },
 };
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-function safeJson(text) {
-  const cleaned = text
-    .trim()
-    .replace(/^```json/gi, "")
-    .replace(/^```/g, "")
-    .replace(/```$/g, "")
-    .trim();
-  return JSON.parse(cleaned);
-}
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(200).json({ ok: true, mensaje: "function viva" });
-  }
-
-  if (!process.env.GROQ_API_KEY) {
-    return res.status(500).json({ error: "GROQ_API_KEY no configurada" });
   }
 
   try {
@@ -40,62 +24,31 @@ export default async function handler(req, res) {
       });
     });
 
-    const uploaded = files.file || files.files || Object.values(files);
-    const fileObj = Array.isArray(uploaded) ? uploaded : uploaded;
-
-    if (!fileObj) {
-      return res.status(400).json({ error: "No se recibió ningún archivo" });
-    }
+    const uploaded = files.file || files.files || Object.values(files)[0];
+    const fileObj = Array.isArray(uploaded) ? uploaded[0] : uploaded;
+    if (!fileObj) return res.status(400).json({ error: "No se recibió ningún archivo" });
 
     const buffer = await fs.promises.readFile(fileObj.filepath);
     const parsed = await pdfParse(buffer);
-    const text = (parsed.text || "").replace(/\s+/g, " ").trim();
-
-    const systemPrompt = `
-Eres un analista de compras para Hormiserv.
-Devuelve UN SOLO JSON válido con esta forma:
-{
-  "key":"string-corta-sin-espacios",
-  "razonSocial":"nombre legal proveedor",
-  "nombreFantasia":"nombre comercial",
-  "location":"ciudad, provincia",
-  "phone":"telefono o whatsapp principal",
-  "itemsCotizados":numero,
-  "totalItems":17,
-  "faltantes":[numeros],
-  "calidad":"Premium | Standard-Plus | Standard",
-  "marca":"texto corto de marcas principales",
-  "precio":numeroTotalEnPesos,
-  "cotiza":[numeros],
-  "isWinner":false,
-  "pendientesProyecto":[1]
-}
-
-Reglas:
-- Considera equivalentes relé diferencial / módulo diferencial / interruptor diferencial.
-- Los kits de jabalina desglosados cuentan como ítem 15.
-- Si no aparece un dato, usa cadena vacía o lista vacía.
-- No incluyas texto adicional ni markdown.
-`.trim();
+    const text = (parsed.text || "").replace(/\s+/g, " ").trim().slice(0, 12000);
 
     const completion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       temperature: 0.1,
       messages: [
-        { role: "system", content: systemPrompt },
+        {
+          role: "system",
+          content: "Responde SOLO con JSON válido. Sin markdown. Sin texto extra.",
+        },
         {
           role: "user",
-          content: `Texto OCR del PDF:\n\n${text}\n\nDevuelve solo JSON.`,
+          content: `Analiza este texto y devuelve un JSON simple con key, razonSocial, itemsCotizados, totalItems, faltantes, calidad, marca, precio, cotiza, isWinner, pendientesProyecto.\n\nTEXTO:\n${text}`,
         },
       ],
     });
 
-    const raw = completion.choices?.?.message?.content || "";
-    const data = safeJson(raw);
-
-    if (!data.key) data.key = "proveedor";
-
-    return res.status(200).json(data);
+    const raw = completion.choices?.[0]?.message?.content || "";
+    return res.status(200).json({ ok: true, raw });
   } catch (err) {
     return res.status(500).json({
       error: "Error procesando la cotización",
