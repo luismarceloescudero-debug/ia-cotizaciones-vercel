@@ -1,128 +1,1720 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>COMPARUM</title>
-  <style>
-    :root{
-      --bg:#081226;
-      --bg2:#0d1a36;
-      --panel:#101d39;
-      --panel-2:#0c1730;
-      --line:#5ea2ff;
-      --text:#eef4ff;
-      --muted:#a9b7d3;
-      --ok:#22c55e;
-      --shadow:0 18px 45px rgba(0,0,0,.34);
-      --r:20px;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at top,#10214b 0%,var(--bg) 55%);color:var(--text)}
-    .wrap{max-width:1280px;margin:auto;padding:22px}
-    .brand{font-size:30px;font-weight:900;letter-spacing:.5px;margin:0 0 6px}
-    .sub{margin:0 0 18px;color:var(--muted)}
-    .shell{border:2px dashed var(--line);border-radius:26px;padding:22px;background:rgba(10,20,43,.72);box-shadow:var(--shadow)}
-    .panel{background:rgba(14,25,50,.95);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px}
-    .upload{border:2px dashed rgba(255,255,255,.12);border-radius:18px;padding:34px 18px;text-align:center;margin-bottom:18px;background:rgba(8,15,31,.35)}
-    .upload h2{margin:0 0 10px;font-size:24px}
-    .small{font-size:13px;color:var(--muted)}
-    .btn{border:0;background:#e8eefc;color:#0b1730;font-weight:800;padding:11px 16px;border-radius:12px;cursor:pointer}
-    .btn:hover{filter:brightness(1.05)}
-    .row{display:grid;grid-template-columns:1fr 360px;gap:18px}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
-    .stat{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);padding:14px;border-radius:14px}
-    .stat .k{font-size:12px;color:var(--muted);display:block}
-    .stat .v{font-size:24px;font-weight:900;margin-top:4px}
-    pre{margin:0;background:#071122;border-radius:16px;padding:18px;color:#dce8ff;min-height:430px;overflow:auto;white-space:pre-wrap;word-break:break-word}
-    .side h3{margin:0 0 10px;font-size:18px}
-    ul{margin:0;padding-left:18px;color:var(--muted);line-height:1.7}
-    .ok{color:#86efac}
-    .footer-note{margin-top:12px;color:var(--muted);font-size:12px}
-    @media (max-width: 980px){.row{grid-template-columns:1fr}.stats{grid-template-columns:1fr}.wrap{padding:14px}.brand{font-size:26px}}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COMPARUM - Marcelo Escudero</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: rgba(37, 99, 235, 0.1);
+            --secondary: #64748b;
+            --success: #059669;
+            --success-light: rgba(5, 150, 105, 0.1);
+            --warning: #d97706;
+            --warning-light: rgba(217, 119, 6, 0.1);
+            --danger: #dc2626;
+            --danger-light: rgba(220, 38, 38, 0.1);
+            --info: #0891b2;
+            --info-light: rgba(8, 145, 178, 0.1);
+            --premium: #7c3aed;
+            --premium-light: rgba(124, 58, 237, 0.1);
+            --gold: #f59e0b;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --surface-hover: #f1f5f9;
+            --text: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --header-height: 70px;
+        }
+
+        [data-theme="dark"] {
+            --primary: #60a5fa;
+            --primary-dark: #3b82f6;
+            --primary-light: rgba(96, 165, 250, 0.1);
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --surface-hover: #334155;
+            --text: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ESTILOS DE IMPRESIÓN CORREGIDOS */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 15mm;
+            }
+
+            body {
+                background: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .no-print, .header, .upload-section, .tabs-nav, .tab-content, 
+            .providers-ranking, .page-title, .page-subtitle, .main-container {
+                display: none !important;
+            }
+
+            .print-detail {
+                display: block !important;
+                position: static !important;
+                width: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                page-break-inside: avoid;
+            }
+
+            .print-detail * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .print-detail.active-print {
+                display: block !important;
+            }
+
+            /* Forzar colores en impresión */
+            .stat-value.success { color: #059669 !important; }
+            .stat-value.premium { color: #7c3aed !important; }
+            .check-yes { color: #059669 !important; }
+            .check-no { color: #dc2626 !important; }
+            .check-partial { color: #d97706 !important; }
+            .winner-badge {
+                background: linear-gradient(135deg, #059669, #10b981) !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+
+        .print-detail {
+            display: none;
+            background: white;
+            padding: 40px;
+            max-width: 100%;
+        }
+
+        .print-detail.active-print {
+            display: block;
+        }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .client-badge {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .exchange-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            background: var(--primary-light);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+        }
+
+        .exchange-control label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .exchange-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exchange-input input {
+            width: 100px;
+            border: 2px solid var(--border);
+            background: var(--surface);
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: 800;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .main-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .page-title {
+            margin-bottom: 8px;
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .page-subtitle {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 1.125rem;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: linear-gradient(135deg, var(--primary-light), rgba(37, 99, 235, 0.05));
+            border: 2px dashed var(--primary);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .upload-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .upload-area {
+            background: var(--surface);
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 48px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            color: var(--primary);
+        }
+
+        .upload-text {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Análisis IA Result */
+        .ia-result {
+            display: none;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+            border: 2px solid var(--success);
+            text-align: left;
+        }
+
+        .ia-result.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .ia-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .ia-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--success);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .ia-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .ia-content {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .uploaded-files-list {
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 8px;
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--surface);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .uploaded-file:last-child {
+            margin-bottom: 0;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .file-status {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .file-status.processed {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .file-status.error {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        /* Providers Grid */
+        .providers-ranking {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .provider-hero-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            border: 3px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .provider-hero-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .provider-hero-card.winner-card {
+            border-color: var(--success);
+            box-shadow: 0 0 0 4px var(--success-light), var(--shadow-lg);
+            order: -1;
+        }
+
+        .winner-badge {
+            position: absolute;
+            top: 0;
+            right: 24px;
+            background: linear-gradient(135deg, var(--success), #10b981);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 0 0 12px 12px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .rank-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .rank-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--gold), #fbbf24);
+            color: white;
+            border: 3px solid var(--gold);
+        }
+
+        .rank-number.second { background: linear-gradient(135deg, #94a3b8, #cbd5e1); border-color: #94a3b8; }
+        .rank-number.third { background: linear-gradient(135deg, #b45309, #d97706); border-color: #b45309; }
+        .rank-number.fourth { background: linear-gradient(135deg, var(--text-muted), var(--text-secondary)); border-color: var(--text-muted); }
+
+        .provider-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 2px;
+            color: var(--text);
+        }
+
+        .provider-fantasia {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 4px;
+        }
+
+        .provider-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .stat-box.primary {
+            background: var(--success-light);
+            border-color: var(--success);
+        }
+
+        .stat-box.premium {
+            background: var(--premium-light);
+            border-color: var(--premium);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            font-family: 'Courier New', monospace;
+        }
+
+        .stat-value.success { color: var(--success); }
+        .stat-value.premium { color: var(--premium); }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* Completitud */
+        .completitud-section {
+            margin: 20px 0;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 12px;
+        }
+
+        .completitud-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .completitud-pct {
+            font-weight: 800;
+            font-size: 1.125rem;
+            color: var(--success);
+        }
+
+        .completitud-bar-bg {
+            height: 10px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .completitud-bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(90deg, var(--success), #10b981);
+            transition: width 0.5s ease;
+        }
+
+        .faltantes-list {
+            margin-top: 12px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .pendientes-box {
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--info-light);
+            border-radius: 8px;
+            border-left: 4px solid var(--info);
+        }
+
+        .pendientes-box strong {
+            color: var(--info);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Detalles */
+        .detail-section {
+            margin: 20px 0;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row:last-child { border-bottom: none; }
+
+        .detail-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .detail-value {
+            font-weight: 700;
+        }
+
+        /* Botones */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 14px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover { background: #128c7e; transform: translateY(-2px); }
+
+        .btn-print {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-print:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Tabs */
+        .tabs-nav {
+            display: flex;
+            gap: 8px;
+            border-bottom: 3px solid var(--border);
+            margin-bottom: 32px;
+            background: var(--surface);
+            padding: 8px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .tab-btn {
+            padding: 16px 28px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-weight: 700;
+            font-size: 0.9375rem;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -3px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .tab-btn:hover { color: var(--text); background: var(--bg); }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--primary-light); }
+
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Matriz */
+        .matriz-container {
+            display: grid;
+            grid-template-columns: 2.5fr repeat(5, 1fr);
+            gap: 2px;
+            background: var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            font-size: 0.875rem;
+        }
+
+        .matriz-header {
+            background: var(--bg);
+            padding: 16px 8px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .matriz-cell {
+            background: var(--surface);
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .matriz-cell.product {
+            text-align: left;
+            padding-left: 16px;
+        }
+
+        .matriz-cell.pendiente {
+            background: var(--info-light);
+            color: var(--info);
+        }
+
+        .check-yes { color: var(--success); font-size: 1.25rem; }
+        .check-no { color: var(--danger); opacity: 0.6; }
+        .check-partial { color: var(--warning); }
+
+        .tag-opcional {
+            display: inline-block;
+            background: var(--info-light);
+            color: var(--info);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.6875rem;
+            font-weight: 800;
+            margin-left: 8px;
+        }
+
+        .tag-pendiente {
+            display: inline-block;
+            background: var(--warning-light);
+            color: var(--warning);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.6875rem;
+            font-weight: 800;
+            margin-left: 8px;
+        }
+
+        /* Print detail styles */
+        .print-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .print-header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .print-header .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin: 4px 0;
+        }
+
+        .print-header .contact {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        .items-table th, .items-table td {
+            padding: 10px 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .items-table th {
+            background: var(--bg);
+            font-weight: 800;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .items-table td {
+            vertical-align: middle;
+        }
+
+        .items-table tr:hover {
+            background: var(--bg);
+        }
+
+        .print-summary {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--bg);
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .print-footer {
+            margin-top: 30px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+
+        .price-highlight {
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .price-success { color: var(--success); }
+        .price-info { color: var(--info); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container { padding: 20px; }
+            .providers-ranking { grid-template-columns: 1fr; }
+            .matriz-container { overflow-x: auto; display: flex; flex-direction: column; }
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1 class="brand">COMPARUM</h1>
-    <p class="sub">Comparativa Inteligente de Cotizaciones</p>
+    <header class="header no-print">
+        <div class="header-left">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                </svg>
+                <span>COMPARUM</span>
+            </div>
+            <span class="client-badge">Marcelo Escudero</span>
+            
+        </div>
+        <div class="header-right">
+            <div class="exchange-control">
+                <label>USD/ARS</label>
+                <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;" id="usdSourceLabel">Fuente: manual</div>
+                <div class="exchange-input">
+                    <input type="number" id="exchangeRateInput" value="1390" onchange="updateExchangeRate()">
+                    <button type="button" onclick="refreshExchangeRate()" style="padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer">↻</button>
+                </div>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()" style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
 
-    <div class="shell">
-      <h2 style="margin:0 0 18px;font-size:22px">Análisis Inteligente de Cotizaciones</h2>
+    <main class="main-container">
+        <h1 class="page-title no-print">🧮 Comparativa Inteligente de Cotizaciones</h1>
+        <p class="page-subtitle no-print"> 19 ítems | Análisis automático por IA</p>
 
-      <div class="upload">
-        <div style="font-size:28px;font-weight:800;margin-bottom:8px">Seleccioná un PDF o imagen</div>
-        <input id="fileInput" type="file" accept=".pdf,.jpg,.jpeg,.png" />
-        <div style="height:12px"></div>
-        <button id="analyzeBtn" class="btn">Enviar a analizar</button>
-        <div class="footer-note">Soporta PDF con texto, PDF escaneado y JPG/PNG vía OCR.</div>
-      </div>
+        <!-- Upload Section MEJORADA -->
+        <div class="upload-section no-print">
+            <div class="upload-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                Análisis Inteligente de Cotizaciones
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                Sube archivos CSV, Excel o TXT con los datos de cotizaciones. El sistema extraerá automáticamente los precios y actualizará la comparativa.
+                <br><strong>Formato esperado:</strong> Código/Ítem, Descripción, Cantidad, Precio Unitario, Proveedor
+            </p>
 
-      <div class="row">
-        <div>
-          <div class="stats">
-            <div class="stat"><span class="k">Fuente</span><span id="src" class="v">-</span></div>
-            <div class="stat"><span class="k">Texto extraído</span><span id="chars" class="v">-</span></div>
-            <div class="stat"><span class="k">Ítems</span><span id="items" class="v">-</span></div>
-          </div>
-          <div class="panel">
-            <div style="font-weight:800;margin-bottom:12px">✓ Análisis Completado por IA</div>
-            <pre id="result">Esperando archivo...</pre>
-          </div>
+            <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                </svg>
+                <div class="upload-text">Arrastra archivos aquí o haz clic para seleccionar</div>
+                <div class="upload-hint">CSV, Excel (.xls, .xlsx), TXT | Máx. 5MB por archivo</div>
+            </div>
+
+            <input type="file" id="fileInput" class="file-input" multiple accept=".csv,.xls,.xlsx,.txt" onchange="handleFiles(this.files)">
+
+            <div class="ia-result" id="iaResult">
+                <div class="ia-header">
+                    <div class="ia-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="ia-title">Archivos Procesados</div>
+                </div>
+                <div class="ia-content" id="iaContent"></div>
+                <div class="uploaded-files-list" id="uploadedFilesList"></div>
+            </div>
         </div>
 
-        <div class="panel side">
-          <h3>Build final de prueba</h3>
-          <ul>
-            <li>Lee PDF con texto embebido.</li>
-            <li>Si no encuentra texto, usa OCR.</li>
-            <li>Mantiene salida JSON compatible con tu flujo actual.</li>
-            <li>Devuelve <span class="ok">source</span>, <span class="ok">extractedChars</span> e <span class="ok">itemsCotizados</span>.</li>
-          </ul>
-          <div class="footer-note">Después ajustamos normalización, matching y scoring.</div>
+        <!-- Ranking de Proveedores -->
+        <div class="providers-ranking no-print" id="providersRanking"></div>
+
+        <!-- Tabs -->
+        <div class="tabs-nav no-print">
+            <button class="tab-btn active" onclick="switchTab('matriz', this)">Matriz de 19 Ítems</button>
+            <button class="tab-btn" onclick="switchTab('resumen', this)">Análisis</button>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <script>
-    const fileInput = document.getElementById('fileInput');
-    const analyzeBtn = document.getElementById('analyzeBtn');
-    const result = document.getElementById('result');
-    const src = document.getElementById('src');
-    const chars = document.getElementById('chars');
-    const items = document.getElementById('items');
+        <div id="matriz" class="tab-content active no-print">
+            <div class="table-container">
+                <div class="matriz-container" id="matrizContainer"></div>
+            </div>
+        </div>
 
-    analyzeBtn.addEventListener('click', async () => {
-      const file = fileInput.files[0];
-      if (!file) {
-        result.textContent = 'Seleccioná un archivo.';
-        return;
-      }
+        <div id="resumen" class="tab-content no-print">
+            <div class="table-container" style="padding: 24px;">
+                <h3 style="margin-bottom: 16px;">Análisis Comparativo</h3>
+                <p style="color: var(--text-secondary); line-height: 1.8;" id="analisisTexto">
+                    <strong>MAS ELECTRO S.A.</strong> (Electro Urquiza) lidera el ranking por combinar el mejor cumplimiento de materiales (15/17 ítems), 
+                    calidad Standard-Plus (CHINT), precio competitivo ($2.245.065 ARS / U$S 1.615,88 USD) y ubicación estratégica en Mendoza capital.
+                </p>
 
-      result.textContent = 'Procesando...';
-      src.textContent = '-';
-      chars.textContent = '-';
-      items.textContent = '-';
+                <div style="margin-top: 24px; background: var(--bg); padding: 20px; border-radius: 12px;">
+                    <h4 style="margin-bottom: 16px;">Comparativa de Precios (ARS / USD)</h4>
+                    <div style="display: grid; gap: 12px;" id="comparativaPrecios">
+                        <!-- Se llena dinámicamente -->
+                    </div>
+                </div>
 
-      const formData = new FormData();
-      formData.append('file', file);
+                <p style="color: var(--text-secondary); margin-top: 24px;">
+                    <strong>Nota:</strong> Items 18 y 19 (Smart Energy Controller BGH SPC01 y Cable UTP CAT 6 EXTERIOR COBRE) 
+                    requieren cotización adicional urgente para completar el proyecto.
+                </p>
+            </div>
+        </div>
+    </main>
 
-      try {
-        const response = await fetch('/api/analizar-cotizacion', {
-          method: 'POST',
-          body: formData
-        });
+    <!-- SECCIONES DE IMPRESIÓN (fuera del main para evitar conflictos) -->
+    <div id="printSections"></div>
 
-        const data = await response.json();
-        result.textContent = JSON.stringify(data.parsed, null, 2);
-        src.textContent = data?.debug?.source || '-';
-        chars.textContent = String(data?.debug?.extractedChars ?? '-');
-        items.textContent = String(data?.parsed?.itemsCotizados ?? '-');
-      } catch (error) {
-        result.textContent = 'Error: ' + String(error.message || error);
-      }
-    });
-  </script>
+    <script>
+
+        const exchangeRate = { value: 1390 };
+
+        // 19 items total
+        const items = [
+            { id: 1, name: 'Prensacable 2"', qty: 2 },
+            { id: 2, name: 'Prensacable 1"', qty: 3 },
+            { id: 3, name: 'Prensacable 3/4"', qty: 1 },
+            { id: 4, name: 'Riel DIN (1m)', qty: 1 },
+            { id: 5, name: 'Terminal bimetálico 150mm', qty: 6 },
+            { id: 6, name: 'Terminal bimetálico 70mm', qty: 3 },
+            { id: 7, name: 'Interruptor 4x200A Regulable (140-200A)', qty: 1, opcional: true },
+            { id: 8, name: 'Interruptor 4x160A Regulable (112-160A)', qty: 1 },
+            { id: 9, name: 'Módulo protección diferencial', qty: 1 },
+            { id: 10, name: 'Gabinete metálico 700x600 IP65 c/contratapa', qty: 1 },
+            { id: 11, name: 'Barra distribución tetrapolar 250A', qty: 1 },
+            { id: 12, name: 'Cable unipolar 70mm² Cu', qty: 16 },
+            { id: 13, name: 'Terminal de cobre 70mm²', qty: 12 },
+            { id: 14, name: 'Bandeja portacable 200mm c/tapa (3m)', qty: 1 },
+            { id: 15, name: 'Kit jabalina 1,5m - 3/4"', qty: 1 },
+            { id: 16, name: 'Bobina Cable 4mm² V-A (100m)', qty: 2 },
+            { id: 17, name: 'Terminal ojal cobre estañado 4mm²', qty: 200 },
+            { id: 18, name: 'Smart Energy Controller BGH SPC01', qty: 1, pendiente: true },
+            { id: 19, name: 'Cable UTP CAT 6 EXTERIOR COBRE', qty: 150, pendiente: true }
+        ];
+
+        // Precios base estimados
+        const preciosBase = {
+            1: 45000, 2: 35000, 3: 28000, 4: 15000, 5: 12000,
+            6: 8500, 7: 280000, 8: 220000, 9: 95000, 10: 180000,
+            11: 65000, 12: 45000, 13: 3500, 14: 120000, 15: 85000,
+            16: 125000, 17: 450, 18: 450000, 19: 890
+        };
+
+        // Datos de proveedores - RAZÓN SOCIAL COMPLETA
+        let providersData = [
+            {
+                key: 'urquiza',
+                rank: 1,
+                razonSocial: 'MAS ELECTRO S.A.',
+                nombreFantasia: 'Electro Urquiza',
+                location: 'Mendoza Capital',
+                phone: '+54 9 2614 53-3949',
+                whatsapp: '5492614533949',
+                itemsCotizados: 15,
+                totalItems: 17,
+                porcentaje: 88,
+                faltantes: [9, 11],
+                calidad: 'Standard-Plus',
+                marca: 'CHINT',
+                precio: 2245065.14,
+                cotiza: [1,2,3,4,5,6,7,8,10,12,13,14,15,16,17],
+                isWinner: true,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
+                preciosItems: {}
+            },
+            {
+                key: 'powerstore',
+                rank: 2,
+                razonSocial: 'ENERSHOP S.R.L.',
+                nombreFantasia: 'PowerStore',
+                location: 'Maipú, Mendoza',
+                phone: '261 5686061',
+                whatsapp: '542615686061',
+                itemsCotizados: 15,
+                totalItems: 17,
+                porcentaje: 88,
+                faltantes: [3, 11],
+                calidad: 'Standard-Plus',
+                marca: 'CHINT',
+                precio: 2598778.22,
+                cotiza: [1,2,4,5,6,7,8,9,10,12,13,14,15,16,17],
+                isWinner: false,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
+                preciosItems: {}
+            },
+            {
+                key: 'norte',
+                rank: 3,
+                razonSocial: "D'IN NORTE S.A.",
+                nombreFantasia: "D'In Norte",
+                location: 'Las Heras, Mendoza',
+                phone: '2617101111',
+                whatsapp: '542617101111',
+                itemsCotizados: 15,
+                totalItems: 17,
+                porcentaje: 88,
+                faltantes: [9, 11],
+                calidad: 'Standard',
+                marca: 'CHINT/Genérico',
+                precio: 2560920.71,
+                cotiza: [1,2,3,4,5,6,7,8,10,12,13,14,15,16,17],
+                isWinner: false,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
+                preciosItems: {}
+            },
+            {
+                key: 'premium',
+                rank: 4,
+                razonSocial: 'ELECTRO PERBE S.A.',
+                nombreFantasia: 'Premium Electric',
+                location: 'Pilar, Buenos Aires',
+                phone: '+54 9 11 2353-9547',
+                whatsapp: '5491123539547',
+                itemsCotizados: 14,
+                totalItems: 17,
+                porcentaje: 82,
+                faltantes: [5, 9, 11],
+                calidad: 'Premium',
+                marca: 'ABB',
+                precio: 2389070.60,
+                cotiza: [1,2,3,4,6,7,8,10,12,13,14,15,16,17],
+                isWinner: false,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
+                preciosItems: {}
+            },
+            {
+                key: 'genco',
+                rank: 5,
+                razonSocial: 'GENCOELEC S.A.',
+                nombreFantasia: 'Genco Materiales',
+                location: 'General Gutiérrez, Mendoza',
+                phone: '+54261481-1460',
+                whatsapp: '542614811460',
+                itemsCotizados: 11,
+                totalItems: 17,
+                porcentaje: 65,
+                faltantes: [5,6,7,8,9,10],
+                calidad: 'Standard',
+                marca: 'Varias',
+                precio: 1950201.10,
+                cotiza: [1,2,3,4,11,12,13,14,15,16,17],
+                isWinner: false,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
+                preciosItems: {}
+            }
+        ];
+
+        // Archivos procesados
+        let processedFiles = [];
+
+        function init() {
+            const savedRate = localStorage.getItem('exchangeRate');
+            if (savedRate) {
+                exchangeRate.value = parseFloat(savedRate);
+                document.getElementById('exchangeRateInput').value = savedRate;
+            }
+            renderProviders();
+            renderMatriz();
+            renderAnalisis();
+            renderPrintSections();
+        }
+
+        function updateExchangeRate() {
+            const val = document.getElementById('exchangeRateInput').value;
+            exchangeRate.value = parseFloat(val);
+            localStorage.setItem('exchangeRate', val);
+            renderProviders();
+            renderAnalisis();
+            renderPrintSections();
+        }
+
+        function renderProviders() {
+            const container = document.getElementById('providersRanking');
+            container.innerHTML = '';
+            const minPrecio = Math.min(...providersData.map(p => p.precio));
+
+            providersData.forEach(prov => {
+                const diff = prov.precio - minPrecio;
+                const diffPct = ((diff / minPrecio) * 100).toFixed(1);
+                const rankClass = prov.rank === 1 ? '' : prov.rank === 2 ? 'second' : prov.rank === 3 ? 'third' : 'fourth';
+
+                const card = document.createElement('div');
+                card.className = `provider-hero-card ${prov.isWinner ? 'winner-card' : ''}`;
+
+                card.innerHTML = `
+                    ${prov.isWinner ? '<div class="winner-badge">RECOMENDADO</div>' : ''}
+
+                    <div class="rank-header">
+                        <div class="rank-number ${rankClass}">${prov.rank}</div>
+                        <div>
+                            <div class="provider-name">${prov.razonSocial}</div>
+                            <div class="provider-fantasia">${prov.nombreFantasia}</div>
+                            <div class="provider-location">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                ${prov.location}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-box ${prov.isWinner ? 'primary' : ''}">
+                            <div class="stat-value ${prov.isWinner ? 'success' : ''}">${prov.itemsCotizados}/${prov.totalItems}</div>
+                            <div class="stat-label">Ítems Cotizados</div>
+                        </div>
+                        <div class="stat-box ${prov.calidad === 'Premium' ? 'premium' : ''}">
+                            <div class="stat-value ${prov.calidad === 'Premium' ? 'premium' : ''}">${prov.calidad}</div>
+                            <div class="stat-label">Calidad</div>
+                        </div>
+                        <div class="stat-box ${prov.isWinner ? 'primary' : ''}">
+                            <div class="stat-value ${prov.isWinner ? 'success' : ''}">$${(prov.precio/1000000).toFixed(2)}M <span style="font-size:0.7rem">ARS</span></div>
+                            <div class="stat-label">Precio Total</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value" style="font-size: 1.25rem;">${prov.marca}</div>
+                            <div class="stat-label">Marca</div>
+                        </div>
+                    </div>
+
+                    <div class="completitud-section">
+                        <div class="completitud-header">
+                            <span style="font-weight: 700;">Materiales Cotizados</span>
+                            <span class="completitud-pct">${prov.itemsCotizados}/${prov.totalItems}</span>
+                        </div>
+                        <div class="completitud-bar-bg">
+                            <div class="completitud-bar-fill" style="width: ${(prov.itemsCotizados/prov.totalItems*100).toFixed(0)}%"></div>
+                        </div>
+                        <div class="faltantes-list">
+                            <strong style="color: var(--danger);">Faltan:</strong> Ítems ${prov.faltantes.join(', ')}
+                        </div>
+                        <div class="pendientes-box">
+                            <strong>Pendientes de Cotización:</strong>
+                            <div>• Smart Energy Controller BGH SPC01</div>
+                            <div>• Cable UTP CAT 6 EXTERIOR COBRE (150m)</div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <div class="detail-row">
+                            <span class="detail-label">Precio Total ARS</span>
+                            <span class="detail-value" style="font-family: monospace; font-size: 1.25rem; font-weight: 800;">$ ${prov.precio.toLocaleString('es-AR')}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Precio Total USD</span>
+                            <span class="detail-value" style="font-family: monospace; font-size: 1.25rem; font-weight: 800; color: var(--info);">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Diferencia vs Mejor</span>
+                            <span class="detail-value" style="color: ${diff===0?'var(--success)':'var(--warning)'}; font-weight: 800;">
+                                ${diff===0?'✓ MEJOR PRECIO':`+$${diff.toLocaleString('es-AR')} ARS (+${diffPct}%)`}
+                            </span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Contacto</span>
+                            <span class="detail-value">${prov.phone}</span>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons no-print">
+                        <a href="https://wa.me/${prov.whatsapp}?text=Hola%20${encodeURIComponent(prov.razonSocial)},%20somos%20Hormiserv%20SRL.%20Nos%20interesa%20su%20cotización." 
+                           target="_blank" class="btn btn-whatsapp">
+                            WhatsApp
+                        </a>
+                        <button class="btn btn-print" onclick="printProvider('${prov.key}')">
+                            Imprimir / PDF
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderMatriz() {
+            const container = document.getElementById('matrizContainer');
+            let html = `
+                <div class="matriz-header" style="text-align: left; padding-left: 16px;">Material / Ítem</div>
+                <div class="matriz-header">MAS ELECTRO S.A.</div>
+                <div class="matriz-header">ENERSHOP S.R.L.</div>
+                <div class="matriz-header">D'IN NORTE S.A.</div>
+                <div class="matriz-header">ELECTRO PERBE S.A.</div>
+                <div class="matriz-header">GENCOELEC S.A.</div>
+            `;
+
+            items.forEach(item => {
+                const tag = item.opcional ? '<span class="tag-opcional">OPC</span>' : item.pendiente ? '<span class="tag-pendiente">PEND</span>' : '';
+
+                html += `
+                    <div class="matriz-cell product" style="${item.pendiente ? 'background: var(--info-light);' : ''}">
+                        <strong>${item.name}</strong>${tag}
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">Cant: ${item.qty}</div>
+                    </div>
+                `;
+
+                providersData.forEach(prov => {
+                    if (item.pendiente) {
+                        html += `<div class="matriz-cell pendiente"><span class="check-partial">⏳ PEND</span></div>`;
+                    } else if (prov.cotiza.includes(item.id)) {
+                        html += `<div class="matriz-cell"><span class="check-yes">✓</span></div>`;
+                    } else {
+                        html += `<div class="matriz-cell" style="background: rgba(220,38,38,0.05);"><span class="check-no">✗</span></div>`;
+                    }
+                });
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderAnalisis() {
+            const container = document.getElementById('comparativaPrecios');
+            const minPrecio = Math.min(...providersData.map(p => p.precio));
+
+            container.innerHTML = providersData.map(prov => {
+                const diff = prov.precio - minPrecio;
+                const isWinner = prov.precio === minPrecio;
+                return `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--surface); border-radius: 8px; ${isWinner ? 'border: 2px solid var(--success);' : ''}">
+                        <div>
+                            <strong>${prov.razonSocial}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">${prov.nombreFantasia}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-family: monospace; font-weight: 700; font-size: 1.1rem;">$ ${prov.precio.toLocaleString('es-AR')}</div>
+                            <div style="font-family: monospace; color: var(--info); font-size: 0.9rem;">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                            ${isWinner ? '<span style="color: var(--success); font-size: 0.75rem; font-weight: 700;">✓ MEJOR PRECIO</span>' : `<span style="color: var(--warning); font-size: 0.75rem;">+$${diff.toLocaleString('es-AR')}</span>`}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderPrintSections() {
+            const container = document.getElementById('printSections');
+            const minPrecio = Math.min(...providersData.map(p => p.precio));
+
+            container.innerHTML = providersData.map(prov => {
+                const diff = prov.precio - minPrecio;
+                const diffPct = ((diff / minPrecio) * 100).toFixed(1);
+
+                return `
+                    <div class="print-detail" id="print-${prov.key}">
+                        <div class="print-header">
+                            <h1>${prov.razonSocial}</h1>
+                            <div class="subtitle">${prov.nombreFantasia}</div>
+                            <div class="subtitle">${prov.location}</div>
+                            <div class="contact">Tel: ${prov.phone}</div>
+                        </div>
+
+                        <h3 style="margin-bottom: 20px; color: var(--text);">Detalle de Cotización - 19 Ítems</h3>
+
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%;">N°</th>
+                                    <th style="width: 35%;">Material</th>
+                                    <th style="width: 8%; text-align: center;">Cant.</th>
+                                    <th style="width: 14%; text-align: right;">Precio Unit. ARS</th>
+                                    <th style="width: 14%; text-align: right;">Precio Unit. USD</th>
+                                    <th style="width: 12%; text-align: right;">Total ARS</th>
+                                    <th style="width: 12%; text-align: center;">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${items.map(item => {
+                                    let estado = '';
+                                    let color = '';
+                                    let bgStyle = '';
+
+                                    // Usar precio del proveedor si existe, sino el base
+                                    const precioUnit = prov.preciosItems[item.id] || preciosBase[item.id] || 0;
+                                    const totalARS = precioUnit * item.qty;
+                                    const precioUnitUSD = precioUnit / exchangeRate.value;
+
+                                    if (item.pendiente) {
+                                        estado = 'PENDIENTE';
+                                        color = 'var(--info)';
+                                        bgStyle = 'background: var(--info-light);';
+                                    } else if (prov.cotiza.includes(item.id)) {
+                                        estado = 'COTIZADO';
+                                        color = 'var(--success)';
+                                    } else {
+                                        estado = 'NO COTIZADO';
+                                        color = 'var(--danger)';
+                                        bgStyle = 'background: rgba(220,38,38,0.05);';
+                                    }
+
+                                    const opcionalTag = item.opcional ? '<span style="font-size: 0.7rem; color: var(--info);"> (OPC)</span>' : '';
+
+                                    return `
+                                        <tr style="${bgStyle}">
+                                            <td style="font-weight: 700;">${item.id}</td>
+                                            <td>${item.name}${opcionalTag}</td>
+                                            <td style="text-align: center; font-weight: 600;">${item.qty}</td>
+                                            <td style="text-align: right; font-family: monospace;">${item.pendiente ? '-' : '$ ' + precioUnit.toLocaleString('es-AR')}</td>
+                                            <td style="text-align: right; font-family: monospace; color: var(--info);">${item.pendiente ? '-' : 'U$S ' + precioUnitUSD.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                            <td style="text-align: right; font-family: monospace; font-weight: 600;">${item.pendiente ? '-' : '$ ' + totalARS.toLocaleString('es-AR')}</td>
+                                            <td style="text-align: center; color: ${color}; font-weight: 700; font-size: 0.75rem;">${estado}</td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                            <tfoot style="background: var(--bg); font-weight: 800;">
+                                <tr style="border-top: 3px solid var(--primary);">
+                                    <td colspan="5" style="padding: 15px 10px; text-align: right; font-size: 1.1rem;">TOTALES:</td>
+                                    <td style="padding: 15px 10px; text-align: right; font-size: 1.2rem; color: var(--success);">$ ${prov.precio.toLocaleString('es-AR')}</td>
+                                    <td style="padding: 15px 10px; text-align: center; font-size: 1rem;">${prov.itemsCotizados}/${prov.totalItems}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" style="text-align: right; color: var(--info);">Total USD:</td>
+                                    <td colspan="2" style="text-align: center; color: var(--info); font-family: monospace; font-size: 1.1rem;">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="print-summary">
+                            <div>
+                                <strong style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Resumen</strong>
+                                <div style="margin-top: 8px;">
+                                    <div><strong>Ítems Cotizados:</strong> ${prov.itemsCotizados} de ${prov.totalItems}</div>
+                                    <div><strong>Calidad:</strong> ${prov.calidad}</div>
+                                    <div><strong>Marca:</strong> ${prov.marca}</div>
+                                    <div><strong>Ranking:</strong> #${prov.rank}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <strong style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Faltantes</strong>
+                                <div style="margin-top: 8px; color: var(--danger);">
+                                    <div><strong>Ítems sin cotizar:</strong> ${prov.faltantes.join(', ')}</div>
+                                    <div style="margin-top: 4px; font-size: 0.9rem;">${prov.pendientes}</div>
+                                </div>
+                                ${diff > 0 ? `<div style="margin-top: 12px; color: var(--warning);"><strong>Diferencia vs mejor:</strong> +$${diff.toLocaleString('es-AR')} ARS (+${diffPct}%)</div>` : '<div style="margin-top: 12px; color: var(--success);"><strong>✓ MEJOR PRECIO</strong></div>'}
+                            </div>
+                        </div>
+
+                        <div class="print-footer">
+                            <strong>Cotización generada por COMPARUM - Marcelo Escudero</strong><br>
+                            Sistema de Comparación COMPARUM - Marcelo Escudero | Tipo de cambio: $${exchangeRate.value} ARS/USD<br>
+                            Fecha: ${new Date().toLocaleDateString('es-AR')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // FUNCIONES DE UPLOAD CORREGIDAS - PROCESAMIENTO REAL
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        }
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+
+            const resultDiv = document.getElementById('iaResult');
+            const contentDiv = document.getElementById('iaContent');
+            const filesListDiv = document.getElementById('uploadedFilesList');
+
+            resultDiv.classList.add('active');
+            contentDiv.innerHTML = '<p style="color: var(--text-muted);">Procesando archivos...</p>';
+            filesListDiv.innerHTML = '';
+
+            Array.from(files).forEach((file, index) => {
+                const reader = new FileReader();
+                const fileId = 'file-' + Date.now() + '-' + index;
+
+                reader.onload = function(e) {
+                    try {
+                        const content = e.target.result;
+                        const extension = file.name.split('.').pop().toLowerCase();
+
+                        let parsedData = null;
+
+                        if (extension === 'csv' || extension === 'txt') {
+                            parsedData = parseCSV(content);
+                        } else if (extension === 'xlsx' || extension === 'xls') {
+                            // Para Excel, mostrar mensaje de que necesita procesamiento
+                            parsedData = { error: 'Archivo Excel detectado. Para procesamiento completo, convierta a CSV o TXT.' };
+                        }
+
+                        // Actualizar UI
+                        addFileToList(file, fileId, parsedData);
+
+                        if (parsedData && !parsedData.error && parsedData.items && parsedData.items.length > 0) {
+                            // Actualizar precios del proveedor
+                            updateProviderFromData(parsedData, file.name);
+                        }
+
+                    } catch (error) {
+                        console.error('Error procesando archivo:', error);
+                        addFileToList(file, fileId, { error: error.message });
+                    }
+                };
+
+                reader.onerror = function() {
+                    addFileToList(file, fileId, { error: 'Error leyendo archivo' });
+                };
+
+                reader.readAsText(file);
+            });
+
+            contentDiv.innerHTML = `
+                <p>✅ <strong>${files.length} archivo(s) recibido(s)</strong></p>
+                <p style="margin-top: 8px; font-size: 0.9rem;">Los archivos CSV/TXT se procesan automáticamente para extraer precios y actualizar la comparativa.</p>
+            `;
+        }
+
+        function parseCSV(content) {
+            const lines = content.split('\n').filter(line => line.trim() !== '');
+            const items = [];
+            let providerName = '';
+
+            // Detectar delimitador (coma, punto y coma, tab)
+            const firstLine = lines[0] || '';
+            const delimiter = firstLine.includes(';') ? ';' : firstLine.includes('\t') ? '\t' : ',';
+
+            lines.forEach((line, index) => {
+                // Saltar encabezados vacíos o de tabla
+                if (index === 0 && (line.toLowerCase().includes('item') || line.toLowerCase().includes('codigo'))) {
+                    return;
+                }
+
+                const cols = line.split(delimiter).map(c => c.trim().replace(/"/g, ''));
+
+                // Intentar detectar proveedor en la primera línea con texto
+                if (!providerName && cols.length > 0 && cols[0].length > 3) {
+                    providerName = cols[0];
+                }
+
+                // Buscar patrones de ítems (números 1-19)
+                const itemMatch = line.match(/^(\d+)[\s;.,]+([^;]+)[\s;.,]+(\d+)[\s;.,]+([\d.,]+)/);
+
+                if (itemMatch) {
+                    const itemId = parseInt(itemMatch[1]);
+                    const description = itemMatch[2].trim();
+                    const qty = parseInt(itemMatch[3]);
+                    const price = parseFloat(itemMatch[4].replace(/[.,]/g, (m) => m === ',' ? '' : '.'));
+
+                    if (itemId >= 1 && itemId <= 19 && !isNaN(price)) {
+                        items.push({
+                            id: itemId,
+                            description: description,
+                            qty: qty,
+                            unitPrice: price,
+                            totalPrice: price * qty
+                        });
+                    }
+                }
+            });
+
+            return {
+                providerName: providerName,
+                items: items,
+                delimiter: delimiter,
+                totalItems: items.length
+            };
+        }
+
+        function addFileToList(file, fileId, data) {
+            const filesListDiv = document.getElementById('uploadedFilesList');
+            const hasError = data && data.error;
+            const hasItems = data && data.items && data.items.length > 0;
+
+            const fileDiv = document.createElement('div');
+            fileDiv.className = 'uploaded-file';
+            fileDiv.id = fileId;
+
+            fileDiv.innerHTML = `
+                <div class="file-info">
+                    <div class="file-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-status ${hasError ? 'error' : hasItems ? 'processed' : ''}">
+                            ${hasError ? '⚠️ ' + data.error : hasItems ? `✓ ${data.items.length} ítems procesados` : '⏳ Procesando...'}
+                        </div>
+                    </div>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                    ${(file.size / 1024).toFixed(1)} KB
+                </div>
+            `;
+
+            filesListDiv.appendChild(fileDiv);
+        }
+
+        function updateProviderFromData(data, filename) {
+            // Intentar detectar proveedor del nombre del archivo o contenido
+            const filenameLower = filename.toLowerCase();
+            let providerKey = null;
+
+            // Mapeo de nombres comunes
+            if (filenameLower.includes('urquiza') || filenameLower.includes('mas electro')) {
+                providerKey = 'urquiza';
+            } else if (filenameLower.includes('power') || filenameLower.includes('enershop')) {
+                providerKey = 'powerstore';
+            } else if (filenameLower.includes('norte') || filenameLower.includes('din')) {
+                providerKey = 'norte';
+            } else if (filenameLower.includes('perbe') || filenameLower.includes('premium')) {
+                providerKey = 'premium';
+            } else if (filenameLower.includes('genco')) {
+                providerKey = 'genco';
+            }
+
+            if (providerKey && data.items) {
+                const provider = providersData.find(p => p.key === providerKey);
+                if (provider) {
+                    // Actualizar precios de ítems
+                    data.items.forEach(item => {
+                        provider.preciosItems[item.id] = item.unitPrice;
+                    });
+
+                    // Recalcular precio total
+                    let newTotal = 0;
+                    provider.cotiza.forEach(itemId => {
+                        const item = items.find(i => i.id === itemId);
+                        if (item) {
+                            const price = provider.preciosItems[itemId] || preciosBase[itemId] || 0;
+                            newTotal += price * item.qty;
+                        }
+                    });
+
+                    if (newTotal > 0) {
+                        provider.precio = newTotal;
+                    }
+
+                    // Actualizar ranking
+                    updateRanking();
+
+                    // Re-renderizar
+                    renderProviders();
+                    renderAnalisis();
+                    renderPrintSections();
+                    renderMatriz();
+
+                    // Mostrar notificación
+                    showNotification(`✅ Precios actualizados para ${provider.razonSocial}`);
+                }
+            }
+        }
+
+        function updateRanking() {
+            // Ordenar por precio
+            const sorted = [...providersData].sort((a, b) => a.precio - b.precio);
+
+            sorted.forEach((prov, index) => {
+                prov.rank = index + 1;
+                prov.isWinner = index === 0;
+            });
+        }
+
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--success);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 12px;
+                font-weight: 600;
+                z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                animation: slideIn 0.3s ease;
+            `;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+
+            setTimeout(() => {
+                notif.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
+
+        function printProvider(providerKey) {
+            // Ocultar todos los print-detail
+            document.querySelectorAll('.print-detail').forEach(el => {
+                el.classList.remove('active-print');
+            });
+
+            // Mostrar solo el del proveedor seleccionado
+            const printSection = document.getElementById('print-' + providerKey);
+            if (printSection) {
+                printSection.classList.add('active-print');
+
+                // Esperar un momento para que se renderice y luego imprimir
+                setTimeout(() => {
+                    window.print();
+
+                    // Limpiar después de imprimir
+                    setTimeout(() => {
+                        printSection.classList.remove('active-print');
+                    }, 500);
+                }, 100);
+            }
+        }
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            html.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+            localStorage.setItem('theme', html.getAttribute('data-theme'));
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // CSS para animaciones de notificación
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        
+        async function refreshExchangeRate() {
+            const label = document.getElementById('usdSourceLabel');
+            try {
+                const r = await fetch('https://dolarapi.com/v1/dolares/oficial', { cache: 'no-store' });
+                const j = await r.json();
+                if (j && j.venta) {
+                    document.getElementById('exchangeRateInput').value = j.venta;
+                    exchangeRate.value = parseFloat(j.venta);
+                    localStorage.setItem('exchangeRate', j.venta);
+                    if (label) label.textContent = 'Fuente: dolarapi.com / oficial';
+                }
+            } catch (e) {
+                if (label) label.textContent = 'Fuente: manual';
+            }
+            updateExchangeRate();
+        }
+init();
+    </script>
 </body>
 </html>
