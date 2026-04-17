@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>COMPARUM - Marcelo Escudero</title>
+    <!-- SheetJS para Excel en cliente -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script>
+    <!-- Mammoth para Word en cliente -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <style>
         :root {
             --primary: #2563eb;
@@ -30,6 +34,7 @@
             --border: #e2e8f0;
             --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
             --radius: 12px;
             --radius-lg: 16px;
             --header-height: 70px;
@@ -59,788 +64,233 @@
 
         /* ESTILOS DE IMPRESIÓN CORREGIDOS */
         @media print {
-            @page {
-                size: A4 landscape;
-                margin: 15mm;
-            }
-
-            body {
-                background: white !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
+            @page { size: A4 landscape; margin: 15mm; }
+            body { background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .no-print, .header, .upload-section, .tabs-nav, .tab-content, 
-            .providers-ranking, .page-title, .page-subtitle, .main-container {
-                display: none !important;
-            }
-
-            .print-detail {
-                display: block !important;
-                position: static !important;
-                width: 100% !important;
-                box-shadow: none !important;
-                border: none !important;
-                background: white !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                page-break-inside: avoid;
-            }
-
-            .print-detail * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-
-            .print-detail.active-print {
-                display: block !important;
-            }
-
-            /* Forzar colores en impresión */
+            .providers-ranking, .page-title, .page-subtitle, .main-container { display: none !important; }
+            .print-detail, .print-comparative { display: none !important; position: static !important; width: 100% !important; box-shadow: none !important; border: none !important; background: white !important; padding: 0 !important; margin: 0 !important; page-break-inside: avoid; }
+            .print-detail.active-print, .print-comparative.active-print { display: block !important; }
+            .print-detail *, .print-comparative * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             .stat-value.success { color: #059669 !important; }
             .stat-value.premium { color: #7c3aed !important; }
             .check-yes { color: #059669 !important; }
             .check-no { color: #dc2626 !important; }
             .check-partial { color: #d97706 !important; }
-            .winner-badge {
-                background: linear-gradient(135deg, #059669, #10b981) !important;
-                color: white !important;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+            .winner-badge { background: linear-gradient(135deg, #059669, #10b981) !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
 
-        .print-detail {
-            display: none;
-            background: white;
-            padding: 40px;
-            max-width: 100%;
-        }
-
-        .print-detail.active-print {
-            display: block;
-        }
+        .print-detail, .print-comparative { display: none; background: white; padding: 40px; max-width: 100%; }
+        .print-detail.active-print, .print-comparative.active-print { display: block; }
 
         .header {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            height: var(--header-height);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 32px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: var(--shadow);
+            background: var(--surface); border-bottom: 1px solid var(--border); height: var(--header-height);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 32px;
+            position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow);
         }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: var(--primary);
-        }
-
-        .client-badge {
-            background: var(--primary-light);
-            color: var(--primary);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+        .header-left { display: flex; align-items: center; gap: 16px; }
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.25rem; color: var(--primary); }
+        .client-badge { background: var(--primary-light); color: var(--primary); padding: 6px 16px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
 
         .exchange-control {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 20px;
-            background: var(--primary-light);
-            border: 2px solid var(--primary);
-            border-radius: 12px;
+            display: flex; align-items: center; gap: 12px; padding: 10px 20px;
+            background: var(--primary-light); border: 2px solid var(--primary); border-radius: 12px;
         }
+        .exchange-control label { font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; }
+        .exchange-input { display: flex; align-items: center; gap: 8px; }
+        .exchange-input input { width: 100px; border: 2px solid var(--border); background: var(--surface); padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: 1rem; text-align: center; }
+        
+        .btn-header {
+            padding: 10px 16px; border-radius: 10px; font-weight: 700; font-size: 0.875rem;
+            cursor: pointer; transition: all 0.3s; border: 2px solid var(--border);
+            background: var(--surface); color: var(--text); display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-header:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+        .btn-header.primary { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-header.primary:hover { background: var(--primary-dark); }
 
-        .exchange-control label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--primary);
-            text-transform: uppercase;
-        }
+        .main-container { max-width: 1600px; margin: 0 auto; padding: 32px; }
 
-        .exchange-input {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .exchange-input input {
-            width: 100px;
-            border: 2px solid var(--border);
-            background: var(--surface);
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-weight: 800;
-            font-size: 1rem;
-            text-align: center;
-        }
-
-        .main-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 32px;
-        }
-
-        .page-title {
-            margin-bottom: 8px;
-            font-size: 2rem;
-            font-weight: 800;
-        }
-
-        .page-subtitle {
-            color: var(--text-muted);
-            margin-bottom: 24px;
-            font-size: 1.125rem;
-        }
+        .page-title { margin-bottom: 8px; font-size: 2rem; font-weight: 800; }
+        .page-subtitle { color: var(--text-muted); margin-bottom: 24px; font-size: 1.125rem; }
 
         /* Upload Section */
         .upload-section {
             background: linear-gradient(135deg, var(--primary-light), rgba(37, 99, 235, 0.05));
-            border: 2px dashed var(--primary);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 32px;
-            text-align: center;
+            border: 2px dashed var(--primary); border-radius: 16px; padding: 32px; margin-bottom: 32px; text-align: center;
         }
-
-        .upload-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
+        .upload-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 12px; }
         .upload-area {
-            background: var(--surface);
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 48px;
-            margin: 20px 0;
-            cursor: pointer;
-            transition: all 0.3s;
+            background: var(--surface); border: 2px dashed var(--border); border-radius: 12px; padding: 48px; margin: 20px 0;
+            cursor: pointer; transition: all 0.3s;
         }
-
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-        }
-
-        .upload-area.dragover {
-            border-color: var(--primary);
-            background: var(--primary-light);
-            transform: scale(1.02);
-        }
-
-        .upload-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 16px;
-            color: var(--primary);
-        }
-
-        .upload-text {
-            font-size: 1.125rem;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-        }
-
-        .upload-hint {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-        }
-
-        .file-input {
-            display: none;
-        }
+        .upload-area:hover { border-color: var(--primary); background: var(--primary-light); }
+        .upload-area.dragover { border-color: var(--primary); background: var(--primary-light); transform: scale(1.02); }
+        .upload-icon { width: 64px; height: 64px; margin: 0 auto 16px; color: var(--primary); }
+        .upload-text { font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 8px; }
+        .upload-hint { font-size: 0.875rem; color: var(--text-muted); }
+        .file-input { display: none; }
 
         /* Análisis IA Result */
-        .ia-result {
-            display: none;
-            background: var(--surface);
-            border-radius: 12px;
-            padding: 24px;
-            margin-top: 20px;
-            border: 2px solid var(--success);
-            text-align: left;
-        }
-
-        .ia-result.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .ia-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--border);
-        }
-
-        .ia-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--success);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .ia-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            color: var(--success);
-        }
-
-        .ia-content {
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .uploaded-files-list {
-            margin-top: 16px;
-            padding: 16px;
-            background: var(--bg);
-            border-radius: 8px;
-        }
-
-        .uploaded-file {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px;
-            background: var(--surface);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .uploaded-file:last-child {
-            margin-bottom: 0;
-        }
-
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .file-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-light);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary);
-        }
-
-        .file-name {
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .file-status {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-        }
-
-        .file-status.processed {
-            color: var(--success);
-            font-weight: 600;
-        }
-
-        .file-status.error {
-            color: var(--danger);
-            font-weight: 600;
-        }
+        .ia-result { display: none; background: var(--surface); border-radius: 12px; padding: 24px; margin-top: 20px; border: 2px solid var(--success); text-align: left; }
+        .ia-result.active { display: block; animation: fadeIn 0.5s ease; }
+        .ia-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
+        .ia-icon { width: 40px; height: 40px; background: var(--success); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; }
+        .ia-title { font-size: 1.125rem; font-weight: 700; color: var(--success); }
+        .ia-content { color: var(--text-secondary); line-height: 1.6; }
+        .uploaded-files-list { margin-top: 16px; padding: 16px; background: var(--bg); border-radius: 8px; }
+        .uploaded-file { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--surface); border-radius: 8px; margin-bottom: 8px; border: 1px solid var(--border); }
+        .uploaded-file:last-child { margin-bottom: 0; }
+        .file-info { display: flex; align-items: center; gap: 12px; }
+        .file-icon { width: 40px; height: 40px; background: var(--primary-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary); }
+        .file-name { font-weight: 600; color: var(--text); }
+        .file-status { font-size: 0.875rem; color: var(--text-muted); }
+        .file-status.processed { color: var(--success); font-weight: 600; }
+        .file-status.error { color: var(--danger); font-weight: 600; }
 
         /* Providers Grid */
-        .providers-ranking {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
-        }
-
+        .providers-ranking { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; margin-bottom: 40px; }
         .provider-hero-card {
-            background: var(--surface);
-            border-radius: var(--radius-lg);
-            padding: 28px;
-            border: 3px solid var(--border);
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow-lg);
+            background: var(--surface); border-radius: var(--radius-lg); padding: 28px; border: 3px solid var(--border);
+            transition: all 0.3s; position: relative; overflow: hidden; box-shadow: var(--shadow-lg);
         }
-
-        .provider-hero-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-xl);
+        .provider-hero-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+        .provider-hero-card.winner-card { border-color: var(--success); box-shadow: 0 0 0 4px var(--success-light), var(--shadow-lg); order: -1; }
+        
+        .provider-score {
+            position: absolute; top: 12px; left: 12px; background: var(--primary); color: white;
+            width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 0.875rem; z-index: 2;
         }
-
-        .provider-hero-card.winner-card {
-            border-color: var(--success);
-            box-shadow: 0 0 0 4px var(--success-light), var(--shadow-lg);
-            order: -1;
-        }
-
         .winner-badge {
-            position: absolute;
-            top: 0;
-            right: 24px;
-            background: linear-gradient(135deg, var(--success), #10b981);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 0 0 12px 12px;
-            font-weight: 800;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            position: absolute; top: 0; right: 24px;
+            background: linear-gradient(135deg, var(--success), #10b981); color: white;
+            padding: 8px 16px; border-radius: 0 0 12px 12px; font-weight: 800; font-size: 0.75rem;
+            text-transform: uppercase; letter-spacing: 0.05em;
         }
-
-        .rank-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--border);
-        }
-
+        .rank-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
         .rank-number {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, var(--gold), #fbbf24);
-            color: white;
-            border: 3px solid var(--gold);
+            width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--gold), #fbbf24); color: white; border: 3px solid var(--gold);
         }
-
         .rank-number.second { background: linear-gradient(135deg, #94a3b8, #cbd5e1); border-color: #94a3b8; }
         .rank-number.third { background: linear-gradient(135deg, #b45309, #d97706); border-color: #b45309; }
         .rank-number.fourth { background: linear-gradient(135deg, var(--text-muted), var(--text-secondary)); border-color: var(--text-muted); }
-
-        .provider-name {
-            font-size: 1.25rem;
-            font-weight: 800;
-            margin-bottom: 2px;
-            color: var(--text);
-        }
-
-        .provider-fantasia {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            font-style: italic;
-            margin-bottom: 4px;
-        }
-
-        .provider-location {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-muted);
-            font-size: 0.875rem;
-        }
+        .provider-name { font-size: 1.25rem; font-weight: 800; margin-bottom: 2px; color: var(--text); }
+        .provider-fantasia { font-size: 0.875rem; color: var(--text-muted); font-style: italic; margin-bottom: 4px; }
+        .provider-location { display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.875rem; }
 
         /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin: 20px 0;
-        }
-
-        .stat-box {
-            background: var(--bg);
-            padding: 16px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid var(--border);
-        }
-
-        .stat-box.primary {
-            background: var(--success-light);
-            border-color: var(--success);
-        }
-
-        .stat-box.premium {
-            background: var(--premium-light);
-            border-color: var(--premium);
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: 800;
-            font-family: 'Courier New', monospace;
-        }
-
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 20px 0; }
+        .stat-box { background: var(--bg); padding: 16px; border-radius: 12px; text-align: center; border: 2px solid var(--border); }
+        .stat-box.primary { background: var(--success-light); border-color: var(--success); }
+        .stat-box.premium { background: var(--premium-light); border-color: var(--premium); }
+        .stat-value { font-size: 1.5rem; font-weight: 800; font-family: 'Courier New', monospace; }
         .stat-value.success { color: var(--success); }
         .stat-value.premium { color: var(--premium); }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-top: 4px;
-        }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-top: 4px; }
 
         /* Completitud */
-        .completitud-section {
-            margin: 20px 0;
-            padding: 16px;
-            background: var(--bg);
-            border-radius: 12px;
-        }
-
-        .completitud-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        .completitud-pct {
-            font-weight: 800;
-            font-size: 1.125rem;
-            color: var(--success);
-        }
-
-        .completitud-bar-bg {
-            height: 10px;
-            background: rgba(0,0,0,0.1);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .completitud-bar-fill {
-            height: 100%;
-            border-radius: 5px;
-            background: linear-gradient(90deg, var(--success), #10b981);
-            transition: width 0.5s ease;
-        }
-
-        .faltantes-list {
-            margin-top: 12px;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .pendientes-box {
-            margin-top: 12px;
-            padding: 12px;
-            background: var(--info-light);
-            border-radius: 8px;
-            border-left: 4px solid var(--info);
-        }
-
-        .pendientes-box strong {
-            color: var(--info);
-            display: block;
-            margin-bottom: 4px;
-        }
+        .completitud-section { margin: 20px 0; padding: 16px; background: var(--bg); border-radius: 12px; }
+        .completitud-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .completitud-pct { font-weight: 800; font-size: 1.125rem; color: var(--success); }
+        .completitud-bar-bg { height: 10px; background: rgba(0,0,0,0.1); border-radius: 5px; overflow: hidden; }
+        .completitud-bar-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--success), #10b981); transition: width 0.5s ease; }
+        .faltantes-list { margin-top: 12px; font-size: 0.875rem; color: var(--text-secondary); }
+        .pendientes-box { margin-top: 12px; padding: 12px; background: var(--info-light); border-radius: 8px; border-left: 4px solid var(--info); }
+        .pendientes-box strong { color: var(--info); display: block; margin-bottom: 4px; }
 
         /* Detalles */
-        .detail-section {
-            margin: 20px 0;
-            padding: 16px;
-            background: var(--bg);
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-        }
-
+        .detail-section { margin: 20px 0; padding: 16px; background: var(--bg); border-radius: 12px; border-left: 4px solid var(--primary); }
+        .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
         .detail-row:last-child { border-bottom: none; }
-
-        .detail-label {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .detail-value {
-            font-weight: 700;
-        }
+        .detail-label { font-size: 0.875rem; color: var(--text-muted); font-weight: 600; }
+        .detail-value { font-weight: 700; }
 
         /* Botones */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 14px 20px;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 0.9375rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        .btn-whatsapp {
-            background: #25d366;
-            color: white;
-        }
-
+        .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .btn { padding: 14px 20px; border-radius: 10px; font-weight: 700; font-size: 0.9375rem; cursor: pointer; transition: all 0.3s; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+        .btn-whatsapp { background: #25d366; color: white; }
         .btn-whatsapp:hover { background: #128c7e; transform: translateY(-2px); }
-
-        .btn-print {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-        }
-
+        .btn-print { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
         .btn-print:hover { background: var(--primary-dark); transform: translateY(-2px); }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
 
         /* Tabs */
-        .tabs-nav {
-            display: flex;
-            gap: 8px;
-            border-bottom: 3px solid var(--border);
-            margin-bottom: 32px;
-            background: var(--surface);
-            padding: 8px;
-            border-radius: 16px 16px 0 0;
-        }
-
-        .tab-btn {
-            padding: 16px 28px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-muted);
-            font-weight: 700;
-            font-size: 0.9375rem;
-            border-bottom: 3px solid transparent;
-            margin-bottom: -3px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-radius: 12px 12px 0 0;
-        }
-
+        .tabs-nav { display: flex; gap: 8px; border-bottom: 3px solid var(--border); margin-bottom: 32px; background: var(--surface); padding: 8px; border-radius: 16px 16px 0 0; }
+        .tab-btn { padding: 16px 28px; background: none; border: none; cursor: pointer; color: var(--text-muted); font-weight: 700; font-size: 0.9375rem; border-bottom: 3px solid transparent; margin-bottom: -3px; transition: all 0.3s; display: flex; align-items: center; gap: 10px; border-radius: 12px 12px 0 0; }
         .tab-btn:hover { color: var(--text); background: var(--bg); }
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--primary-light); }
-
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Matriz */
-        .matriz-container {
-            display: grid;
-            grid-template-columns: 2.5fr repeat(5, 1fr);
-            gap: 2px;
-            background: var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            font-size: 0.875rem;
-        }
-
-        .matriz-header {
-            background: var(--bg);
-            padding: 16px 8px;
-            font-weight: 800;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            text-align: center;
-        }
-
-        .matriz-cell {
-            background: var(--surface);
-            padding: 12px 8px;
-            text-align: center;
-            font-weight: 600;
-        }
-
-        .matriz-cell.product {
-            text-align: left;
-            padding-left: 16px;
-        }
-
-        .matriz-cell.pendiente {
-            background: var(--info-light);
-            color: var(--info);
-        }
-
+        .matriz-container { display: grid; grid-template-columns: 2.5fr repeat(5, 1fr); gap: 2px; background: var(--border); border-radius: 12px; overflow: hidden; font-size: 0.875rem; }
+        .matriz-header { background: var(--bg); padding: 16px 8px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; text-align: center; }
+        .matriz-cell { background: var(--surface); padding: 12px 8px; text-align: center; font-weight: 600; }
+        .matriz-cell.product { text-align: left; padding-left: 16px; }
+        .matriz-cell.pendiente { background: var(--info-light); color: var(--info); }
         .check-yes { color: var(--success); font-size: 1.25rem; }
         .check-no { color: var(--danger); opacity: 0.6; }
         .check-partial { color: var(--warning); }
+        .tag-opcional { display: inline-block; background: var(--info-light); color: var(--info); padding: 2px 8px; border-radius: 4px; font-size: 0.6875rem; font-weight: 800; margin-left: 8px; }
+        .tag-pendiente { display: inline-block; background: var(--warning-light); color: var(--warning); padding: 2px 8px; border-radius: 4px; font-size: 0.6875rem; font-weight: 800; margin-left: 8px; }
 
-        .tag-opcional {
-            display: inline-block;
-            background: var(--info-light);
-            color: var(--info);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.6875rem;
-            font-weight: 800;
-            margin-left: 8px;
-        }
-
-        .tag-pendiente {
-            display: inline-block;
-            background: var(--warning-light);
-            color: var(--warning);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.6875rem;
-            font-weight: 800;
-            margin-left: 8px;
-        }
-
+        /* MODAL EDITOR */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--surface); border-radius: var(--radius-lg); padding: 32px; width: 95%; max-width: 900px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-xl); border: 1px solid var(--border); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
+        .modal-title { font-size: 1.25rem; font-weight: 700; color: var(--text); }
+        .modal-close { background: var(--bg); border: 1px solid var(--border); cursor: pointer; padding: 8px; border-radius: 8px; color: var(--text-muted); transition: all 0.2s; }
+        .modal-close:hover { background: var(--danger-light); color: var(--danger); }
+        .items-editor { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .item-edit-header { display: grid; grid-template-columns: 50px 1fr 90px 100px 100px 50px; gap: 8px; padding: 0 12px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .item-edit-row { display: grid; grid-template-columns: 50px 1fr 90px 100px 100px 50px; gap: 8px; align-items: center; padding: 12px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); }
+        .item-edit-row input, .item-edit-row select { padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); font-size: 0.875rem; width: 100%; }
+        .item-edit-row .btn-icon { width: 36px; height: 36px; border-radius: 8px; border: none; background: var(--danger-light); color: var(--danger); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .item-edit-row .btn-icon:hover { background: var(--danger); color: white; }
+        .editor-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border); }
+        
         /* Print detail styles */
-        .print-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid var(--primary);
-        }
-
-        .print-header h1 {
-            color: var(--primary);
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-        }
-
-        .print-header .subtitle {
-            color: var(--text-muted);
-            font-size: 1rem;
-            margin: 4px 0;
-        }
-
-        .print-header .contact {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-top: 8px;
-        }
-
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            margin-top: 20px;
-        }
-
-        .items-table th, .items-table td {
-            padding: 10px 8px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .items-table th {
-            background: var(--bg);
-            font-weight: 800;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-        }
-
-        .items-table td {
-            vertical-align: middle;
-        }
-
-        .items-table tr:hover {
-            background: var(--bg);
-        }
-
-        .print-summary {
-            margin-top: 30px;
-            padding: 20px;
-            background: var(--bg);
-            border-radius: 8px;
-            border: 2px solid var(--border);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .print-footer {
-            margin-top: 30px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            border-top: 1px solid var(--border);
-            padding-top: 20px;
-        }
-
-        .price-highlight {
-            font-size: 1.3rem;
-            font-weight: 800;
-        }
-
+        .print-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid var(--primary); }
+        .print-header h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 8px; }
+        .print-header .subtitle { color: var(--text-muted); font-size: 1rem; margin: 4px 0; }
+        .print-header .contact { color: var(--text-muted); font-size: 0.9rem; margin-top: 8px; }
+        .items-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 20px; }
+        .items-table th, .items-table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+        .items-table th { background: var(--bg); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
+        .items-table td { vertical-align: middle; }
+        .items-table tr:hover { background: var(--bg); }
+        .print-summary { margin-top: 30px; padding: 20px; background: var(--bg); border-radius: 8px; border: 2px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .print-footer { margin-top: 30px; text-align: center; color: var(--text-muted); font-size: 0.75rem; border-top: 1px solid var(--border); padding-top: 20px; }
+        .price-highlight { font-size: 1.3rem; font-weight: 800; }
         .price-success { color: var(--success); }
         .price-info { color: var(--info); }
 
-        /* Responsive */
+        /* Comparative print */
+        .comp-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 20px; }
+        .comp-table th, .comp-table td { padding: 8px; border: 1px solid var(--border); text-align: center; }
+        .comp-table th { background: var(--bg); font-weight: 700; }
+        .comp-table td:first-child { text-align: left; font-weight: 600; }
+        .comp-table .winner-col { background: rgba(5, 150, 105, 0.08); }
+
+        /* Utilidades */
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .badge-success { background: var(--success-light); color: var(--success); }
+        .badge-warning { background: var(--warning-light); color: var(--warning); }
+        .spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         @media (max-width: 1024px) {
             .main-container { padding: 20px; }
             .providers-ranking { grid-template-columns: 1fr; }
             .matriz-container { overflow-x: auto; display: flex; flex-direction: column; }
+            .header-actions { display: none; }
         }
     </style>
 </head>
@@ -854,9 +304,25 @@
                 <span>COMPARUM</span>
             </div>
             <span class="client-badge">Marcelo Escudero</span>
-            
         </div>
         <div class="header-right">
+            <div class="header-actions no-print">
+                <button class="btn-header" onclick="openItemsEditor()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Editar Materiales
+                </button>
+                <button class="btn-header primary" onclick="openPrintOptions()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Imprimir
+                </button>
+            </div>
             <div class="exchange-control">
                 <label>USD/ARS</label>
                 <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;" id="usdSourceLabel">Fuente: manual</div>
@@ -875,8 +341,8 @@
     </header>
 
     <main class="main-container">
-        <h1 class="page-title no-print">🧮 Comparativa Inteligente de Cotizaciones</h1>
-        <p class="page-subtitle no-print"> 19 ítems | Análisis automático por IA</p>
+        <h1 class="page-title no-print"> Comparativa Inteligente de Cotizaciones</h1>
+        <p class="page-subtitle no-print"><span id="totalItemsLabel">19</span> ítems | Análisis automático por IA | Ranking Inteligente</p>
 
         <!-- Upload Section MEJORADA -->
         <div class="upload-section no-print">
@@ -889,8 +355,8 @@
                 Análisis Inteligente de Cotizaciones
             </div>
             <p style="color: var(--text-secondary); margin-bottom: 16px;">
-                Sube archivos CSV, Excel o TXT con los datos de cotizaciones. El sistema extraerá automáticamente los precios y actualizará la comparativa.
-                <br><strong>Formato esperado:</strong> Código/Ítem, Descripción, Cantidad, Precio Unitario, Proveedor
+                Sube cotizaciones en cualquier formato: <strong>PDF, imágenes (JPG/PNG), Excel, Word, CSV o TXT</strong>. 
+                El sistema extrae automáticamente precios vía IA/OCR y actualiza el ranking.
             </p>
 
             <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
@@ -902,10 +368,10 @@
                     <polyline points="10 9 9 9 8 9"></polyline>
                 </svg>
                 <div class="upload-text">Arrastra archivos aquí o haz clic para seleccionar</div>
-                <div class="upload-hint">CSV, Excel (.xls, .xlsx), TXT | Máx. 5MB por archivo</div>
+                <div class="upload-hint">PDF, Excel (.xls, .xlsx), Word (.docx), Imágenes (.jpg, .png), CSV, TXT | Máx. 10MB por archivo</div>
             </div>
 
-            <input type="file" id="fileInput" class="file-input" multiple accept=".csv,.xls,.xlsx,.txt" onchange="handleFiles(this.files)">
+            <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.csv,.txt,.xls,.xlsx,.docx,.jpg,.jpeg,.png,.gif,.bmp,.webp" onchange="handleFiles(this.files)">
 
             <div class="ia-result" id="iaResult">
                 <div class="ia-header">
@@ -926,7 +392,7 @@
 
         <!-- Tabs -->
         <div class="tabs-nav no-print">
-            <button class="tab-btn active" onclick="switchTab('matriz', this)">Matriz de 19 Ítems</button>
+            <button class="tab-btn active" onclick="switchTab('matriz', this)">Matriz de <span class="matriz-count">19</span> Ítems</button>
             <button class="tab-btn" onclick="switchTab('resumen', this)">Análisis</button>
         </div>
 
@@ -938,36 +404,100 @@
 
         <div id="resumen" class="tab-content no-print">
             <div class="table-container" style="padding: 24px;">
-                <h3 style="margin-bottom: 16px;">Análisis Comparativo</h3>
+                <h3 style="margin-bottom: 16px;">Análisis Comparativo Inteligente</h3>
                 <p style="color: var(--text-secondary); line-height: 1.8;" id="analisisTexto">
-                    <strong>MAS ELECTRO S.A.</strong> (Electro Urquiza) lidera el ranking por combinar el mejor cumplimiento de materiales (15/17 ítems), 
-                    calidad Standard-Plus (CHINT), precio competitivo ($2.245.065 ARS / U$S 1.615,88 USD) y ubicación estratégica en Mendoza capital.
+                    El ranking se calcula ponderando: <strong>Cumplimiento de materiales (50%)</strong> + 
+                    <strong>Calidad de marca (25%)</strong> + <strong>Mejor precio (25%)</strong>.
                 </p>
 
                 <div style="margin-top: 24px; background: var(--bg); padding: 20px; border-radius: 12px;">
                     <h4 style="margin-bottom: 16px;">Comparativa de Precios (ARS / USD)</h4>
-                    <div style="display: grid; gap: 12px;" id="comparativaPrecios">
-                        <!-- Se llena dinámicamente -->
-                    </div>
+                    <div style="display: grid; gap: 12px;" id="comparativaPrecios"></div>
                 </div>
 
-                <p style="color: var(--text-secondary); margin-top: 24px;">
-                    <strong>Nota:</strong> Items 18 y 19 (Smart Energy Controller BGH SPC01 y Cable UTP CAT 6 EXTERIOR COBRE) 
-                    requieren cotización adicional urgente para completar el proyecto.
-                </p>
+                <div style="margin-top: 24px; background: var(--bg); padding: 20px; border-radius: 12px;">
+                    <h4 style="margin-bottom: 16px;">Ranking Detallado</h4>
+                    <div style="display: grid; gap: 12px;" id="rankingDetallado"></div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- SECCIONES DE IMPRESIÓN (fuera del main para evitar conflictos) -->
+    <!-- MODAL EDITOR DE MATERIALES -->
+    <div class="modal-overlay no-print" id="itemsEditorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Editar Listado de Materiales</div>
+                <button class="modal-close" onclick="closeItemsEditor()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 0.875rem;">
+                Modifica los materiales a cotizar. Los cambios se guardan automáticamente y recalculan todo el ranking.
+            </p>
+            <div class="items-editor" id="itemsEditor"></div>
+            <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+                <button class="btn btn-print" onclick="addItemRow()" style="flex: 1;">
+                    + Añadir Ítem
+                </button>
+                <button class="btn" onclick="resetItemsDefault()" style="flex: 1; background: var(--bg); color: var(--text); border: 2px solid var(--border);">
+                    Restablecer Default
+                </button>
+            </div>
+            <div class="editor-actions">
+                <span style="color: var(--text-muted); font-size: 0.875rem;" id="editorSummary">19 ítems configurados</span>
+                <button class="btn btn-print" onclick="saveItemsEditor()">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- OPCIONES DE IMPRESIÓN FLOTANTES -->
+    <div class="modal-overlay no-print" id="printOptionsModal" onclick="if(event.target===this)closePrintOptions()">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <div class="modal-title">Opciones de Impresión</div>
+                <button class="modal-close" onclick="closePrintOptions()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px; margin: 20px 0;">
+                <button class="btn btn-print" onclick="printComparative('full')" style="justify-content: flex-start; padding: 20px;">
+                    <div style="text-align: left;">
+                        <div style="font-size: 1.1rem; margin-bottom: 4px;">Comparativa Completa</div>
+                        <div style="font-size: 0.8rem; opacity: 0.8; font-weight: 400;">Todos los proveedores, matriz y precios en una sola hoja</div>
+                    </div>
+                </button>
+                <button class="btn" onclick="printComparative('summary')" style="justify-content: flex-start; padding: 20px; background: var(--bg); color: var(--text); border: 2px solid var(--border);">
+                    <div style="text-align: left;">
+                        <div style="font-size: 1.1rem; margin-bottom: 4px;">Resumen Ejecutivo</div>
+                        <div style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted);">Ranking, scores y totales comparativos</div>
+                    </div>
+                </button>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; padding: 12px; background: var(--bg); border-radius: 8px;">
+                    También puedes imprimir un proveedor individual desde su tarjeta con el botón "Imprimir / PDF"
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECCIONES DE IMPRESIÓN INDIVIDUAL -->
     <div id="printSections"></div>
 
+    <!-- SECCIÓN DE IMPRESIÓN COMPARATIVA -->
+    <div id="printComparativeSection"></div>
+
     <script>
-
         const exchangeRate = { value: 1390 };
+        let itemsEditorData = [];
 
-        // 19 items total
-        const items = [
+        // Items default
+        const defaultItems = [
             { id: 1, name: 'Prensacable 2"', qty: 2 },
             { id: 2, name: 'Prensacable 1"', qty: 3 },
             { id: 3, name: 'Prensacable 3/4"', qty: 1 },
@@ -989,6 +519,8 @@
             { id: 19, name: 'Cable UTP CAT 6 EXTERIOR COBRE', qty: 150, pendiente: true }
         ];
 
+        let items = [];
+
         // Precios base estimados
         const preciosBase = {
             1: 45000, 2: 35000, 3: 28000, 4: 15000, 5: 12000,
@@ -1000,104 +532,49 @@
         // Datos de proveedores - RAZÓN SOCIAL COMPLETA
         let providersData = [
             {
-                key: 'urquiza',
-                rank: 1,
-                razonSocial: 'MAS ELECTRO S.A.',
-                nombreFantasia: 'Electro Urquiza',
-                location: 'Mendoza Capital',
-                phone: '+54 9 2614 53-3949',
-                whatsapp: '5492614533949',
-                itemsCotizados: 15,
-                totalItems: 17,
-                porcentaje: 88,
-                faltantes: [9, 11],
-                calidad: 'Standard-Plus',
-                marca: 'CHINT',
-                precio: 2245065.14,
+                key: 'urquiza', rank: 1, razonSocial: 'MAS ELECTRO S.A.', nombreFantasia: 'Electro Urquiza',
+                location: 'Mendoza Capital', phone: '+54 9 2614 53-3949', whatsapp: '5492614533949',
+                itemsCotizados: 15, totalItems: 17, porcentaje: 88, faltantes: [9, 11],
+                calidad: 'Standard-Plus', marca: 'CHINT', precio: 2245065.14,
                 cotiza: [1,2,3,4,5,6,7,8,10,12,13,14,15,16,17],
-                isWinner: true,
-                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
-                preciosItems: {}
+                isWinner: true, score: 0,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {}
             },
             {
-                key: 'powerstore',
-                rank: 2,
-                razonSocial: 'ENERSHOP S.R.L.',
-                nombreFantasia: 'PowerStore',
-                location: 'Maipú, Mendoza',
-                phone: '261 5686061',
-                whatsapp: '542615686061',
-                itemsCotizados: 15,
-                totalItems: 17,
-                porcentaje: 88,
-                faltantes: [3, 11],
-                calidad: 'Standard-Plus',
-                marca: 'CHINT',
-                precio: 2598778.22,
+                key: 'powerstore', rank: 2, razonSocial: 'ENERSHOP S.R.L.', nombreFantasia: 'PowerStore',
+                location: 'Maipú, Mendoza', phone: '261 5686061', whatsapp: '542615686061',
+                itemsCotizados: 15, totalItems: 17, porcentaje: 88, faltantes: [3, 11],
+                calidad: 'Standard-Plus', marca: 'CHINT', precio: 2598778.22,
                 cotiza: [1,2,4,5,6,7,8,9,10,12,13,14,15,16,17],
-                isWinner: false,
-                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
-                preciosItems: {}
+                isWinner: false, score: 0,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {}
             },
             {
-                key: 'norte',
-                rank: 3,
-                razonSocial: "D'IN NORTE S.A.",
-                nombreFantasia: "D'In Norte",
-                location: 'Las Heras, Mendoza',
-                phone: '2617101111',
-                whatsapp: '542617101111',
-                itemsCotizados: 15,
-                totalItems: 17,
-                porcentaje: 88,
-                faltantes: [9, 11],
-                calidad: 'Standard',
-                marca: 'CHINT/Genérico',
-                precio: 2560920.71,
+                key: 'norte', rank: 3, razonSocial: "D'IN NORTE S.A.", nombreFantasia: "D'In Norte",
+                location: 'Las Heras, Mendoza', phone: '2617101111', whatsapp: '542617101111',
+                itemsCotizados: 15, totalItems: 17, porcentaje: 88, faltantes: [9, 11],
+                calidad: 'Standard', marca: 'CHINT/Genérico', precio: 2560920.71,
                 cotiza: [1,2,3,4,5,6,7,8,10,12,13,14,15,16,17],
-                isWinner: false,
-                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
-                preciosItems: {}
+                isWinner: false, score: 0,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {}
             },
             {
-                key: 'premium',
-                rank: 4,
-                razonSocial: 'ELECTRO PERBE S.A.',
-                nombreFantasia: 'Premium Electric',
-                location: 'Pilar, Buenos Aires',
-                phone: '+54 9 11 2353-9547',
-                whatsapp: '5491123539547',
-                itemsCotizados: 14,
-                totalItems: 17,
-                porcentaje: 82,
-                faltantes: [5, 9, 11],
-                calidad: 'Premium',
-                marca: 'ABB',
-                precio: 2389070.60,
+                key: 'premium', rank: 4, razonSocial: 'ELECTRO PERBE S.A.', nombreFantasia: 'Premium Electric',
+                location: 'Pilar, Buenos Aires', phone: '+54 9 11 2353-9547', whatsapp: '5491123539547',
+                itemsCotizados: 14, totalItems: 17, porcentaje: 82, faltantes: [5, 9, 11],
+                calidad: 'Premium', marca: 'ABB', precio: 2389070.60,
                 cotiza: [1,2,3,4,6,7,8,10,12,13,14,15,16,17],
-                isWinner: false,
-                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
-                preciosItems: {}
+                isWinner: false, score: 0,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {}
             },
             {
-                key: 'genco',
-                rank: 5,
-                razonSocial: 'GENCOELEC S.A.',
-                nombreFantasia: 'Genco Materiales',
-                location: 'General Gutiérrez, Mendoza',
-                phone: '+54261481-1460',
-                whatsapp: '542614811460',
-                itemsCotizados: 11,
-                totalItems: 17,
-                porcentaje: 65,
-                faltantes: [5,6,7,8,9,10],
-                calidad: 'Standard',
-                marca: 'Varias',
-                precio: 1950201.10,
+                key: 'genco', rank: 5, razonSocial: 'GENCOELEC S.A.', nombreFantasia: 'Genco Materiales',
+                location: 'General Gutiérrez, Mendoza', phone: '+54261481-1460', whatsapp: '542614811460',
+                itemsCotizados: 11, totalItems: 17, porcentaje: 65, faltantes: [5,6,7,8,9,10],
+                calidad: 'Standard', marca: 'Varias', precio: 1950201.10,
                 cotiza: [1,2,3,4,11,12,13,14,15,16,17],
-                isWinner: false,
-                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior',
-                preciosItems: {}
+                isWinner: false, score: 0,
+                pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {}
             }
         ];
 
@@ -1105,26 +582,80 @@
         let processedFiles = [];
 
         function init() {
+            // Cargar items desde localStorage o default
+            const savedItems = localStorage.getItem('comparum_items');
+            items = savedItems ? JSON.parse(savedItems) : JSON.parse(JSON.stringify(defaultItems));
+            
             const savedRate = localStorage.getItem('exchangeRate');
             if (savedRate) {
                 exchangeRate.value = parseFloat(savedRate);
                 document.getElementById('exchangeRateInput').value = savedRate;
             }
+            
+            updateTotalItemsLabel();
+            calculateRanking();
             renderProviders();
             renderMatriz();
             renderAnalisis();
             renderPrintSections();
+            renderPrintComparative();
+        }
+
+        function updateTotalItemsLabel() {
+            const total = items.length;
+            document.getElementById('totalItemsLabel').textContent = total;
+            document.querySelectorAll('.matriz-count').forEach(el => el.textContent = total);
         }
 
         function updateExchangeRate() {
             const val = document.getElementById('exchangeRateInput').value;
             exchangeRate.value = parseFloat(val);
             localStorage.setItem('exchangeRate', val);
+            calculateRanking();
             renderProviders();
             renderAnalisis();
             renderPrintSections();
+            renderPrintComparative();
         }
 
+        // ==================== RANKING INTELIGENTE ====================
+        function calculateRanking() {
+            const totalItemsCount = items.length;
+            const minPrecio = Math.min(...providersData.map(p => p.precio || Infinity)) || 1;
+
+            providersData.forEach(prov => {
+                prov.totalItems = totalItemsCount;
+                // Asegurar que itemsCotizados no exceda el total
+                if (prov.itemsCotizados > totalItemsCount) prov.itemsCotizados = totalItemsCount;
+                
+                const cumplimiento = (prov.itemsCotizados || 0) / totalItemsCount;
+                
+                // Score calidad
+                let calidadScore = 0.5; // default
+                const calidadStr = (prov.calidad || '').toLowerCase();
+                if (calidadStr.includes('premium')) calidadScore = 1.0;
+                else if (calidadStr.includes('plus') || calidadStr.includes('standard-plus')) calidadScore = 0.8;
+                else if (calidadStr.includes('standard')) calidadScore = 0.6;
+                
+                // Score precio (inversamente proporcional, normalizado)
+                const precioScore = minPrecio / (prov.precio || Infinity);
+                
+                // Score compuesto ponderado
+                prov.score = (cumplimiento * 0.50) + (calidadScore * 0.25) + (precioScore * 0.25);
+                prov.scorePct = (prov.score * 100).toFixed(1);
+            });
+
+            // Ordenar por score descendente
+            providersData.sort((a, b) => b.score - a.score);
+            
+            // Actualizar rank e isWinner
+            providersData.forEach((prov, index) => {
+                prov.rank = index + 1;
+                prov.isWinner = index === 0;
+            });
+        }
+
+        // ==================== RENDER PROVIDERS ====================
         function renderProviders() {
             const container = document.getElementById('providersRanking');
             container.innerHTML = '';
@@ -1140,10 +671,11 @@
 
                 card.innerHTML = `
                     ${prov.isWinner ? '<div class="winner-badge">RECOMENDADO</div>' : ''}
+                    <div class="provider-score" title="Score ponderado: Cumplimiento 50% + Calidad 25% + Precio 25%">${prov.scorePct}</div>
 
                     <div class="rank-header">
                         <div class="rank-number ${rankClass}">${prov.rank}</div>
-                        <div>
+                        <div style="margin-left: 50px;">
                             <div class="provider-name">${prov.razonSocial}</div>
                             <div class="provider-fantasia">${prov.nombreFantasia}</div>
                             <div class="provider-location">
@@ -1188,8 +720,7 @@
                         </div>
                         <div class="pendientes-box">
                             <strong>Pendientes de Cotización:</strong>
-                            <div>• Smart Energy Controller BGH SPC01</div>
-                            <div>• Cable UTP CAT 6 EXTERIOR COBRE (150m)</div>
+                            <div>${prov.pendientes}</div>
                         </div>
                     </div>
 
@@ -1209,6 +740,10 @@
                             </span>
                         </div>
                         <div class="detail-row">
+                            <span class="detail-label">Score</span>
+                            <span class="detail-value" style="color: var(--primary);">${prov.scorePct}/100</span>
+                        </div>
+                        <div class="detail-row">
                             <span class="detail-label">Contacto</span>
                             <span class="detail-value">${prov.phone}</span>
                         </div>
@@ -1216,12 +751,8 @@
 
                     <div class="action-buttons no-print">
                         <a href="https://wa.me/${prov.whatsapp}?text=Hola%20${encodeURIComponent(prov.razonSocial)},%20somos%20Hormiserv%20SRL.%20Nos%20interesa%20su%20cotización." 
-                           target="_blank" class="btn btn-whatsapp">
-                            WhatsApp
-                        </a>
-                        <button class="btn btn-print" onclick="printProvider('${prov.key}')">
-                            Imprimir / PDF
-                        </button>
+                           target="_blank" class="btn btn-whatsapp">WhatsApp</a>
+                        <button class="btn btn-print" onclick="printProvider('${prov.key}')">Imprimir / PDF</button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1241,14 +772,12 @@
 
             items.forEach(item => {
                 const tag = item.opcional ? '<span class="tag-opcional">OPC</span>' : item.pendiente ? '<span class="tag-pendiente">PEND</span>' : '';
-
                 html += `
                     <div class="matriz-cell product" style="${item.pendiente ? 'background: var(--info-light);' : ''}">
                         <strong>${item.name}</strong>${tag}
                         <div style="font-size: 0.75rem; color: var(--text-muted);">Cant: ${item.qty}</div>
                     </div>
                 `;
-
                 providersData.forEach(prov => {
                     if (item.pendiente) {
                         html += `<div class="matriz-cell pendiente"><span class="check-partial">⏳ PEND</span></div>`;
@@ -1259,15 +788,15 @@
                     }
                 });
             });
-
             container.innerHTML = html;
         }
 
         function renderAnalisis() {
-            const container = document.getElementById('comparativaPrecios');
+            const containerPrecios = document.getElementById('comparativaPrecios');
+            const containerRanking = document.getElementById('rankingDetallado');
             const minPrecio = Math.min(...providersData.map(p => p.precio));
 
-            container.innerHTML = providersData.map(prov => {
+            containerPrecios.innerHTML = providersData.map(prov => {
                 const diff = prov.precio - minPrecio;
                 const isWinner = prov.precio === minPrecio;
                 return `
@@ -1284,6 +813,480 @@
                     </div>
                 `;
             }).join('');
+
+            containerRanking.innerHTML = providersData.map(prov => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); ${prov.isWinner ? 'border-left: 4px solid var(--success);' : ''}">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: ${prov.isWinner ? 'var(--success)' : 'var(--bg)'}; color: ${prov.isWinner ? 'white' : 'var(--text-muted)'}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.875rem;">${prov.rank}</div>
+                        <div>
+                            <div style="font-weight: 700;">${prov.razonSocial}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">${prov.calidad} • ${prov.marca}</div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">${prov.scorePct}<span style="font-size: 0.7rem; color: var(--text-muted);">/100</span></div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">${prov.itemsCotizados}/${prov.totalItems} ítems • $${(prov.precio/1000000).toFixed(2)}M</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== EDITOR DE MATERIALES ====================
+        function openItemsEditor() {
+            itemsEditorData = JSON.parse(JSON.stringify(items));
+            renderItemsEditor();
+            document.getElementById('itemsEditorModal').classList.add('active');
+        }
+
+        function closeItemsEditor() {
+            document.getElementById('itemsEditorModal').classList.remove('active');
+        }
+
+        function renderItemsEditor() {
+            const container = document.getElementById('itemsEditor');
+            let html = `
+                <div class="item-edit-header">
+                    <div>N°</div>
+                    <div>Material / Descripción</div>
+                    <div>Cantidad</div>
+                    <div>Tipo</div>
+                    <div>Estado</div>
+                    <div></div>
+                </div>
+            `;
+            
+            itemsEditorData.forEach((item, idx) => {
+                html += `
+                    <div class="item-edit-row" data-idx="${idx}">
+                        <input type="number" value="${item.id}" readonly style="background: var(--bg); text-align: center; font-weight: 700;">
+                        <input type="text" value="${item.name}" onchange="updateItemField(${idx}, 'name', this.value)" placeholder="Nombre del material">
+                        <input type="number" value="${item.qty}" onchange="updateItemField(${idx}, 'qty', parseInt(this.value)||1)" style="text-align: center;">
+                        <select onchange="updateItemField(${idx}, 'tipo', this.value)">
+                            <option value="normal" ${!item.opcional && !item.pendiente ? 'selected' : ''}>Normal</option>
+                            <option value="opcional" ${item.opcional ? 'selected' : ''}>Opcional</option>
+                            <option value="pendiente" ${item.pendiente ? 'selected' : ''}>Pendiente</option>
+                        </select>
+                        <select onchange="updateItemField(${idx}, 'estado', this.value)">
+                            <option value="activo" ${!item.inactive ? 'selected' : ''}>Activo</option>
+                            <option value="inactivo" ${item.inactive ? 'selected' : ''}>Inactivo</option>
+                        </select>
+                        <button class="btn-icon" onclick="removeItemRow(${idx})" title="Eliminar">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            document.getElementById('editorSummary').textContent = `${itemsEditorData.length} ítems configurados`;
+        }
+
+        function updateItemField(idx, field, value) {
+            if (field === 'tipo') {
+                itemsEditorData[idx].opcional = (value === 'opcional');
+                itemsEditorData[idx].pendiente = (value === 'pendiente');
+            } else if (field === 'estado') {
+                itemsEditorData[idx].inactive = (value === 'inactivo');
+            } else {
+                itemsEditorData[idx][field] = value;
+            }
+        }
+
+        function removeItemRow(idx) {
+            itemsEditorData.splice(idx, 1);
+            // Re-numerar IDs
+            itemsEditorData.forEach((item, i) => item.id = i + 1);
+            renderItemsEditor();
+        }
+
+        function addItemRow() {
+            const newId = itemsEditorData.length > 0 ? Math.max(...itemsEditorData.map(i => i.id)) + 1 : 1;
+            itemsEditorData.push({ id: newId, name: 'Nuevo material', qty: 1 });
+            renderItemsEditor();
+        }
+
+        function resetItemsDefault() {
+            if (confirm('¿Restablecer el listado original de 19 ítems? Se perderán los cambios personalizados.')) {
+                itemsEditorData = JSON.parse(JSON.stringify(defaultItems));
+                renderItemsEditor();
+            }
+        }
+
+        function saveItemsEditor() {
+            items = JSON.parse(JSON.stringify(itemsEditorData));
+            localStorage.setItem('comparum_items', JSON.stringify(items));
+            closeItemsEditor();
+            updateTotalItemsLabel();
+            calculateRanking();
+            renderProviders();
+            renderMatriz();
+            renderAnalisis();
+            renderPrintSections();
+            renderPrintComparative();
+            showNotification('✅ Materiales actualizados y ranking recalculado');
+        }
+
+        // ==================== UPLOAD MULTI-FORMATO ====================
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        }
+
+        async function handleFiles(files) {
+            if (files.length === 0) return;
+            const resultDiv = document.getElementById('iaResult');
+            const contentDiv = document.getElementById('iaContent');
+            const filesListDiv = document.getElementById('uploadedFilesList');
+
+            resultDiv.classList.add('active');
+            contentDiv.innerHTML = '<p style="color: var(--text-muted);">Procesando archivos...</p>';
+            filesListDiv.innerHTML = '';
+
+            for (const file of Array.from(files)) {
+                const fileId = 'file-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                addFileToList(file, fileId, null);
+
+                try {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    let result = null;
+
+                    if (['csv', 'txt'].includes(ext)) {
+                        result = await processTextFile(file);
+                    } else if (['pdf'].includes(ext)) {
+                        result = await processBackendFile(file, 'pdf');
+                    } else if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext)) {
+                        result = await processBackendFile(file, 'image');
+                    } else if (['xlsx', 'xls'].includes(ext)) {
+                        result = await processExcelFile(file);
+                    } else if (['docx'].includes(ext)) {
+                        result = await processDocxFile(file);
+                    } else {
+                        throw new Error('Formato no soportado');
+                    }
+
+                    updateFileStatus(fileId, result);
+
+                    if (result && result.items && result.items.length > 0) {
+                        updateProviderFromData(result, file.name);
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    updateFileStatus(fileId, { error: error.message || 'Error de procesamiento' });
+                }
+            }
+
+            contentDiv.innerHTML = `
+                <p>✅ <strong>Proceso completado</strong></p>
+                <p style="margin-top: 8px; font-size: 0.9rem;">Revisa el listado inferior. Los precios detectados se integrarán automáticamente al ranking.</p>
+            `;
+        }
+
+        function addFileToList(file, fileId, data) {
+            const filesListDiv = document.getElementById('uploadedFilesList');
+            const hasError = data && data.error;
+            const hasItems = data && data.items && data.items.length > 0;
+
+            const fileDiv = document.createElement('div');
+            fileDiv.className = 'uploaded-file';
+            fileDiv.id = fileId;
+            fileDiv.innerHTML = `
+                <div class="file-info">
+                    <div class="file-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="file-name">${file.name}</div>
+                        <div class="file-status" id="status-${fileId}">
+                            ${hasError ? '<span style="color:var(--danger)">⚠️ ' + data.error + '</span>' : 
+                              hasItems ? `✓ ${data.items.length} ítems detectados` : 
+                              '<span class="spinner"></span> Procesando...'}
+                        </div>
+                    </div>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">${(file.size / 1024).toFixed(1)} KB</div>
+            `;
+            filesListDiv.appendChild(fileDiv);
+        }
+
+        function updateFileStatus(fileId, data) {
+            const statusEl = document.getElementById('status-' + fileId);
+            if (!statusEl) return;
+            if (data.error) {
+                statusEl.innerHTML = '<span style="color:var(--danger); font-weight:600;">⚠️ ' + data.error + '</span>';
+                statusEl.className = 'file-status error';
+            } else if (data.items && data.items.length > 0) {
+                statusEl.innerHTML = `✓ <strong>${data.items.length}</strong> ítems detectados${data.providerName ? ' • ' + data.providerName : ''}`;
+                statusEl.className = 'file-status processed';
+            } else {
+                statusEl.innerHTML = 'ℹ️ No se detectaron ítems con precios';
+            }
+        }
+
+        // Procesamiento local de CSV/TXT
+        function processTextFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const content = e.target.result;
+                        const parsed = parseCSVContent(content, file.name);
+                        resolve(parsed);
+                    } catch (err) { reject(err); }
+                };
+                reader.onerror = () => reject(new Error('Error leyendo archivo'));
+                reader.readAsText(file);
+            });
+        }
+
+        function parseCSVContent(content, filename) {
+            const lines = content.split('\n').filter(line => line.trim() !== '');
+            const delimiter = lines[0] && lines[0].includes(';') ? ';' : lines[0] && lines[0].includes('\t') ? '\t' : ',';
+            const itemsDetected = [];
+            let providerName = '';
+
+            lines.forEach((line, idx) => {
+                const cols = line.split(delimiter).map(c => c.trim().replace(/"/g, ''));
+                if (idx === 0 && line.toLowerCase().match(/item|codigo|material/)) return;
+
+                // Detectar proveedor
+                if (!providerName && cols[0] && cols[0].length > 3 && cols[0].length < 50) {
+                    providerName = cols[0];
+                }
+
+                // Patrones: ID, Descripción, Cantidad, Precio
+                const itemMatch = line.match(/^(\d+)[\s;.,]+([^;.,]+)[\s;.,]+(\d+)[\s;.,]+([\d.,]+)/);
+                if (itemMatch) {
+                    const itemId = parseInt(itemMatch[1]);
+                    const price = parseFloat(itemMatch[4].replace(/\./g, '').replace(',', '.'));
+                    if (itemId >= 1 && itemId <= 100 && !isNaN(price)) {
+                        itemsDetected.push({
+                            id: itemId, description: itemMatch[2].trim(),
+                            qty: parseInt(itemMatch[3]), unitPrice: price, totalPrice: price * parseInt(itemMatch[3])
+                        });
+                    }
+                }
+            });
+
+            return { providerName: detectProviderFromFilename(filename) || providerName, items: itemsDetected, source: 'csv' };
+        }
+
+        // Procesamiento Excel (SheetJS)
+        async function processExcelFile(file) {
+            const data = await file.arrayBuffer();
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1, blankrows: false });
+            
+            const itemsDetected = [];
+            let providerName = '';
+
+            jsonData.forEach((row, idx) => {
+                if (!Array.isArray(row) || row.length < 3) return;
+                
+                // Intentar detectar proveedor en primeras filas
+                if (idx < 3 && !providerName) {
+                    const firstCell = String(row[0] || '');
+                    if (firstCell.length > 3 && firstCell.length < 60) providerName = firstCell;
+                }
+
+                // Buscar filas que empiecen con número (ID)
+                const firstCol = String(row[0] || '').trim();
+                const idMatch = firstCol.match(/^(\d+)$/);
+                if (idMatch) {
+                    const itemId = parseInt(idMatch[1]);
+                    const desc = String(row[1] || '');
+                    const qty = parseInt(row[2]) || 1;
+                    // Buscar precio en las siguientes columnas
+                    let price = 0;
+                    for (let i = 3; i < row.length; i++) {
+                        const val = parseFloat(String(row[i]).replace(/\./g, '').replace(',', '.'));
+                        if (!isNaN(val) && val > 100) { price = val; break; }
+                    }
+                    if (itemId >= 1 && itemId <= 100 && price > 0) {
+                        itemsDetected.push({ id: itemId, description: desc, qty, unitPrice: price, totalPrice: price * qty });
+                    }
+                }
+            });
+
+            return { providerName: detectProviderFromFilename(file.name) || providerName, items: itemsDetected, source: 'excel' };
+        }
+
+        // Procesamiento Word (Mammoth)
+        async function processDocxFile(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const result = await mammoth.extractRawText({ arrayBuffer });
+            const text = result.value;
+            // Reutilizar parser de CSV/TXT sobre el texto extraído
+            const parsed = parseCSVContent(text, file.name);
+            parsed.source = 'docx';
+            return parsed;
+        }
+
+        // Backend PDF / OCR
+        async function processBackendFile(file, type) {
+            const arrayBuffer = await file.arrayBuffer();
+            const response = await fetch('/api/analizar-cotizacion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/octet-stream',
+                    'X-File-Name': encodeURIComponent(file.name),
+                    'X-File-Type': type
+                },
+                body: new Uint8Array(arrayBuffer)
+            });
+            
+            if (!response.ok) throw new Error('Error del servidor de análisis');
+            
+            const data = await response.json();
+            if (!data.ok) throw new Error(data.debug?.error || 'Error en análisis');
+            
+            // Convertir respuesta del backend al formato unificado
+            const backendParsed = data.parsed || {};
+            const itemsDetected = [];
+            
+            if (backendParsed.extractedItems) {
+                backendParsed.extractedItems.forEach(it => {
+                    if (it.matchedItemId && it.unitPrice > 0) {
+                        itemsDetected.push({
+                            id: it.matchedItemId,
+                            description: it.description || '',
+                            qty: it.qty || 1,
+                            unitPrice: it.unitPrice,
+                            totalPrice: it.totalPrice || it.unitPrice * (it.qty || 1)
+                        });
+                    }
+                });
+            }
+            
+            return {
+                providerName: backendParsed.razonSocial || backendParsed.nombreFantasia || detectProviderFromFilename(file.name),
+                items: itemsDetected,
+                source: type,
+                raw: backendParsed
+            };
+        }
+
+        function detectProviderFromFilename(filename) {
+            const f = filename.toLowerCase();
+            if (f.includes('urquiza') || f.includes('mas electro')) return 'MAS ELECTRO S.A.';
+            if (f.includes('power') || f.includes('enershop')) return 'ENERSHOP S.R.L.';
+            if (f.includes('norte') || f.includes('din')) return "D'IN NORTE S.A.";
+            if (f.includes('perbe') || f.includes('premium')) return 'ELECTRO PERBE S.A.';
+            if (f.includes('genco')) return 'GENCOELEC S.A.';
+            return '';
+        }
+
+        function updateProviderFromData(data, filename) {
+            const filenameLower = filename.toLowerCase();
+            let providerKey = null;
+
+            if (filenameLower.includes('urquiza') || filenameLower.includes('mas electro')) providerKey = 'urquiza';
+            else if (filenameLower.includes('power') || filenameLower.includes('enershop')) providerKey = 'powerstore';
+            else if (filenameLower.includes('norte') || filenameLower.includes('din')) providerKey = 'norte';
+            else if (filenameLower.includes('perbe') || filenameLower.includes('premium')) providerKey = 'premium';
+            else if (filenameLower.includes('genco')) providerKey = 'genco';
+            else if (data.providerName) {
+                const pn = data.providerName.toLowerCase();
+                if (pn.includes('urquiza')) providerKey = 'urquiza';
+                else if (pn.includes('power') || pn.includes('enershop')) providerKey = 'powerstore';
+                else if (pn.includes('norte')) providerKey = 'norte';
+                else if (pn.includes('perbe') || pn.includes('premium')) providerKey = 'premium';
+                else if (pn.includes('genco')) providerKey = 'genco';
+            }
+
+            if (!providerKey || !data.items) return;
+
+            const provider = providersData.find(p => p.key === providerKey);
+            if (!provider) return;
+
+            // Actualizar precios de ítems detectados
+            data.items.forEach(item => {
+                if (item.id && item.unitPrice > 0) {
+                    provider.preciosItems[item.id] = item.unitPrice;
+                    // Si el item no está en la lista de cotizados del proveedor, añadirlo
+                    if (!provider.cotiza.includes(item.id)) {
+                        provider.cotiza.push(item.id);
+                    }
+                }
+            });
+
+            // Recalcular items cotizados (excluyendo inactivos y pendientes)
+            const activeItems = items.filter(i => !i.inactive && !i.pendiente);
+            const cotizadosUnicos = provider.cotiza.filter(id => activeItems.some(i => i.id === id));
+            provider.itemsCotizados = cotizadosUnicos.length;
+            provider.faltantes = activeItems.filter(i => !provider.cotiza.includes(i.id)).map(i => i.id);
+
+            // Recalcular precio total
+            let newTotal = 0;
+            provider.cotiza.forEach(itemId => {
+                const item = items.find(i => i.id === itemId);
+                if (item && !item.inactive) {
+                    const price = provider.preciosItems[itemId] || preciosBase[itemId] || 0;
+                    newTotal += price * item.qty;
+                }
+            });
+            if (newTotal > 0) provider.precio = newTotal;
+
+            calculateRanking();
+            renderProviders();
+            renderAnalisis();
+            renderPrintSections();
+            renderPrintComparative();
+            renderMatriz();
+            showNotification(`✅ Precios actualizados para ${provider.razonSocial} (${data.items.length} ítems)`);
+        }
+
+        // ==================== IMPRESIÓN ====================
+        function openPrintOptions() {
+            document.getElementById('printOptionsModal').classList.add('active');
+        }
+
+        function closePrintOptions() {
+            document.getElementById('printOptionsModal').classList.remove('active');
+        }
+
+        function printComparative(type) {
+            closePrintOptions();
+            document.querySelectorAll('.print-detail, .print-comparative').forEach(el => el.classList.remove('active-print'));
+            
+            const sectionId = type === 'full' ? 'print-comparative-full' : 'print-comparative-summary';
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.classList.add('active-print');
+                setTimeout(() => {
+                    window.print();
+                    setTimeout(() => section.classList.remove('active-print'), 500);
+                }, 200);
+            }
+        }
+
+        function printProvider(providerKey) {
+            document.querySelectorAll('.print-detail, .print-comparative').forEach(el => el.classList.remove('active-print'));
+            const printSection = document.getElementById('print-' + providerKey);
+            if (printSection) {
+                printSection.classList.add('active-print');
+                setTimeout(() => {
+                    window.print();
+                    setTimeout(() => printSection.classList.remove('active-print'), 500);
+                }, 100);
+            }
         }
 
         function renderPrintSections() {
@@ -1293,6 +1296,7 @@
             container.innerHTML = providersData.map(prov => {
                 const diff = prov.precio - minPrecio;
                 const diffPct = ((diff / minPrecio) * 100).toFixed(1);
+                const activeItems = items.filter(i => !i.inactive);
 
                 return `
                     <div class="print-detail" id="print-${prov.key}">
@@ -1303,7 +1307,7 @@
                             <div class="contact">Tel: ${prov.phone}</div>
                         </div>
 
-                        <h3 style="margin-bottom: 20px; color: var(--text);">Detalle de Cotización - 19 Ítems</h3>
+                        <h3 style="margin-bottom: 20px; color: var(--text);">Detalle de Cotización - ${activeItems.length} Ítems</h3>
 
                         <table class="items-table">
                             <thead>
@@ -1318,31 +1322,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${items.map(item => {
-                                    let estado = '';
-                                    let color = '';
-                                    let bgStyle = '';
-
-                                    // Usar precio del proveedor si existe, sino el base
+                                ${activeItems.map(item => {
                                     const precioUnit = prov.preciosItems[item.id] || preciosBase[item.id] || 0;
                                     const totalARS = precioUnit * item.qty;
                                     const precioUnitUSD = precioUnit / exchangeRate.value;
+                                    let estado = '', color = '', bgStyle = '';
 
-                                    if (item.pendiente) {
-                                        estado = 'PENDIENTE';
-                                        color = 'var(--info)';
-                                        bgStyle = 'background: var(--info-light);';
-                                    } else if (prov.cotiza.includes(item.id)) {
-                                        estado = 'COTIZADO';
-                                        color = 'var(--success)';
-                                    } else {
-                                        estado = 'NO COTIZADO';
-                                        color = 'var(--danger)';
-                                        bgStyle = 'background: rgba(220,38,38,0.05);';
-                                    }
-
+                                    if (item.pendiente) { estado = 'PENDIENTE'; color = 'var(--info)'; bgStyle = 'background: var(--info-light);'; }
+                                    else if (prov.cotiza.includes(item.id)) { estado = 'COTIZADO'; color = 'var(--success)'; }
+                                    else { estado = 'NO COTIZADO'; color = 'var(--danger)'; bgStyle = 'background: rgba(220,38,38,0.05);'; }
+                                    
                                     const opcionalTag = item.opcional ? '<span style="font-size: 0.7rem; color: var(--info);"> (OPC)</span>' : '';
-
                                     return `
                                         <tr style="${bgStyle}">
                                             <td style="font-weight: 700;">${item.id}</td>
@@ -1376,7 +1366,7 @@
                                     <div><strong>Ítems Cotizados:</strong> ${prov.itemsCotizados} de ${prov.totalItems}</div>
                                     <div><strong>Calidad:</strong> ${prov.calidad}</div>
                                     <div><strong>Marca:</strong> ${prov.marca}</div>
-                                    <div><strong>Ranking:</strong> #${prov.rank}</div>
+                                    <div><strong>Ranking:</strong> #${prov.rank} (Score: ${prov.scorePct})</div>
                                 </div>
                             </div>
                             <div>
@@ -1391,7 +1381,7 @@
 
                         <div class="print-footer">
                             <strong>Cotización generada por COMPARUM - Marcelo Escudero</strong><br>
-                            Sistema de Comparación COMPARUM - Marcelo Escudero | Tipo de cambio: $${exchangeRate.value} ARS/USD<br>
+                            Sistema de Comparación COMPARUM | Tipo de cambio: $${exchangeRate.value} ARS/USD<br>
                             Fecha: ${new Date().toLocaleDateString('es-AR')}
                         </div>
                     </div>
@@ -1399,273 +1389,120 @@
             }).join('');
         }
 
-        // FUNCIONES DE UPLOAD CORREGIDAS - PROCESAMIENTO REAL
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.currentTarget.classList.add('dragover');
-        }
+        function renderPrintComparative() {
+            const container = document.getElementById('printComparativeSection');
+            const activeItems = items.filter(i => !i.inactive);
+            const minPrecio = Math.min(...providersData.map(p => p.precio));
 
-        function handleDragLeave(e) {
-            e.currentTarget.classList.remove('dragover');
-        }
-
-        function handleDrop(e) {
-            e.preventDefault();
-            e.currentTarget.classList.remove('dragover');
-            handleFiles(e.dataTransfer.files);
-        }
-
-        function handleFiles(files) {
-            if (files.length === 0) return;
-
-            const resultDiv = document.getElementById('iaResult');
-            const contentDiv = document.getElementById('iaContent');
-            const filesListDiv = document.getElementById('uploadedFilesList');
-
-            resultDiv.classList.add('active');
-            contentDiv.innerHTML = '<p style="color: var(--text-muted);">Procesando archivos...</p>';
-            filesListDiv.innerHTML = '';
-
-            Array.from(files).forEach((file, index) => {
-                const reader = new FileReader();
-                const fileId = 'file-' + Date.now() + '-' + index;
-
-                reader.onload = function(e) {
-                    try {
-                        const content = e.target.result;
-                        const extension = file.name.split('.').pop().toLowerCase();
-
-                        let parsedData = null;
-
-                        if (extension === 'csv' || extension === 'txt') {
-                            parsedData = parseCSV(content);
-                        } else if (extension === 'xlsx' || extension === 'xls') {
-                            // Para Excel, mostrar mensaje de que necesita procesamiento
-                            parsedData = { error: 'Archivo Excel detectado. Para procesamiento completo, convierta a CSV o TXT.' };
-                        }
-
-                        // Actualizar UI
-                        addFileToList(file, fileId, parsedData);
-
-                        if (parsedData && !parsedData.error && parsedData.items && parsedData.items.length > 0) {
-                            // Actualizar precios del proveedor
-                            updateProviderFromData(parsedData, file.name);
-                        }
-
-                    } catch (error) {
-                        console.error('Error procesando archivo:', error);
-                        addFileToList(file, fileId, { error: error.message });
-                    }
-                };
-
-                reader.onerror = function() {
-                    addFileToList(file, fileId, { error: 'Error leyendo archivo' });
-                };
-
-                reader.readAsText(file);
-            });
-
-            contentDiv.innerHTML = `
-                <p>✅ <strong>${files.length} archivo(s) recibido(s)</strong></p>
-                <p style="margin-top: 8px; font-size: 0.9rem;">Los archivos CSV/TXT se procesan automáticamente para extraer precios y actualizar la comparativa.</p>
-            `;
-        }
-
-        function parseCSV(content) {
-            const lines = content.split('\n').filter(line => line.trim() !== '');
-            const items = [];
-            let providerName = '';
-
-            // Detectar delimitador (coma, punto y coma, tab)
-            const firstLine = lines[0] || '';
-            const delimiter = firstLine.includes(';') ? ';' : firstLine.includes('\t') ? '\t' : ',';
-
-            lines.forEach((line, index) => {
-                // Saltar encabezados vacíos o de tabla
-                if (index === 0 && (line.toLowerCase().includes('item') || line.toLowerCase().includes('codigo'))) {
-                    return;
-                }
-
-                const cols = line.split(delimiter).map(c => c.trim().replace(/"/g, ''));
-
-                // Intentar detectar proveedor en la primera línea con texto
-                if (!providerName && cols.length > 0 && cols[0].length > 3) {
-                    providerName = cols[0];
-                }
-
-                // Buscar patrones de ítems (números 1-19)
-                const itemMatch = line.match(/^(\d+)[\s;.,]+([^;]+)[\s;.,]+(\d+)[\s;.,]+([\d.,]+)/);
-
-                if (itemMatch) {
-                    const itemId = parseInt(itemMatch[1]);
-                    const description = itemMatch[2].trim();
-                    const qty = parseInt(itemMatch[3]);
-                    const price = parseFloat(itemMatch[4].replace(/[.,]/g, (m) => m === ',' ? '' : '.'));
-
-                    if (itemId >= 1 && itemId <= 19 && !isNaN(price)) {
-                        items.push({
-                            id: itemId,
-                            description: description,
-                            qty: qty,
-                            unitPrice: price,
-                            totalPrice: price * qty
-                        });
-                    }
-                }
-            });
-
-            return {
-                providerName: providerName,
-                items: items,
-                delimiter: delimiter,
-                totalItems: items.length
-            };
-        }
-
-        function addFileToList(file, fileId, data) {
-            const filesListDiv = document.getElementById('uploadedFilesList');
-            const hasError = data && data.error;
-            const hasItems = data && data.items && data.items.length > 0;
-
-            const fileDiv = document.createElement('div');
-            fileDiv.className = 'uploaded-file';
-            fileDiv.id = fileId;
-
-            fileDiv.innerHTML = `
-                <div class="file-info">
-                    <div class="file-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                        </svg>
+            // === FULL COMPARATIVE ===
+            let fullHtml = `
+                <div class="print-comparative" id="print-comparative-full">
+                    <div class="print-header">
+                        <h1>COMPARATIVA COMPLETA DE PROVEEDORES</h1>
+                        <div class="subtitle">Marcelo Escudero - COMPARUM</div>
+                        <div class="contact">Fecha: ${new Date().toLocaleDateString('es-AR')} | TC: $${exchangeRate.value} ARS/USD</div>
                     </div>
-                    <div>
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-status ${hasError ? 'error' : hasItems ? 'processed' : ''}">
-                            ${hasError ? '⚠️ ' + data.error : hasItems ? `✓ ${data.items.length} ítems procesados` : '⏳ Procesando...'}
-                        </div>
-                    </div>
-                </div>
-                <div style="font-size: 0.8rem; color: var(--text-muted);">
-                    ${(file.size / 1024).toFixed(1)} KB
+
+                    <table class="comp-table">
+                        <thead>
+                            <tr>
+                                <th>Material</th>
+                                ${providersData.map(p => `<th class="${p.isWinner ? 'winner-col' : ''}">${p.razonSocial}<br><span style="font-size:0.7rem; font-weight:400;">${p.nombreFantasia}</span></th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${activeItems.map(item => `
+                                <tr>
+                                    <td>
+                                        <strong>${item.name}</strong>
+                                        <div style="font-size:0.7rem; color:#666;">Cant: ${item.qty}${item.opcional ? ' (OPC)' : ''}${item.pendiente ? ' (PEND)' : ''}</div>
+                                    </td>
+                                    ${providersData.map(prov => {
+                                        if (item.pendiente) return '<td style="color:var(--info); font-size:0.75rem;">⏳ PEND</td>';
+                                        if (prov.cotiza.includes(item.id)) {
+                                            const price = prov.preciosItems[item.id] || preciosBase[item.id] || 0;
+                                            return `<td style="font-family:monospace; font-size:0.8rem;">$${price.toLocaleString('es-AR')}<br><span style="color:var(--info); font-size:0.7rem;">U$S ${(price/exchangeRate.value).toFixed(2)}</span></td>`;
+                                        }
+                                        return '<td style="color:var(--danger); font-size:0.75rem;">✗ N/C</td>';
+                                    }).join('')}
+                                </tr>
+                            `).join('')}
+                            <tr style="background: var(--bg); font-weight: 800;">
+                                <td style="text-align: right; padding: 12px;">TOTAL ARS:</td>
+                                ${providersData.map(prov => `<td style="font-family:monospace; font-size: 1rem; color: ${prov.precio === minPrecio ? 'var(--success)' : 'var(--text)'};">$${prov.precio.toLocaleString('es-AR')}</td>`).join('')}
+                            </tr>
+                            <tr style="background: var(--bg);">
+                                <td style="text-align: right;">TOTAL USD:</td>
+                                ${providersData.map(prov => `<td style="font-family:monospace; color: var(--info);">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>`).join('')}
+                            </tr>
+                            <tr style="background: var(--bg);">
+                                <td style="text-align: right;">ÍTEMS:</td>
+                                ${providersData.map(prov => `<td>${prov.itemsCotizados}/${prov.totalItems}</td>`).join('')}
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="print-footer">COMPARUM - Sistema de Comparación de Cotizaciones</div>
                 </div>
             `;
 
-            filesListDiv.appendChild(fileDiv);
-        }
-
-        function updateProviderFromData(data, filename) {
-            // Intentar detectar proveedor del nombre del archivo o contenido
-            const filenameLower = filename.toLowerCase();
-            let providerKey = null;
-
-            // Mapeo de nombres comunes
-            if (filenameLower.includes('urquiza') || filenameLower.includes('mas electro')) {
-                providerKey = 'urquiza';
-            } else if (filenameLower.includes('power') || filenameLower.includes('enershop')) {
-                providerKey = 'powerstore';
-            } else if (filenameLower.includes('norte') || filenameLower.includes('din')) {
-                providerKey = 'norte';
-            } else if (filenameLower.includes('perbe') || filenameLower.includes('premium')) {
-                providerKey = 'premium';
-            } else if (filenameLower.includes('genco')) {
-                providerKey = 'genco';
-            }
-
-            if (providerKey && data.items) {
-                const provider = providersData.find(p => p.key === providerKey);
-                if (provider) {
-                    // Actualizar precios de ítems
-                    data.items.forEach(item => {
-                        provider.preciosItems[item.id] = item.unitPrice;
-                    });
-
-                    // Recalcular precio total
-                    let newTotal = 0;
-                    provider.cotiza.forEach(itemId => {
-                        const item = items.find(i => i.id === itemId);
-                        if (item) {
-                            const price = provider.preciosItems[itemId] || preciosBase[itemId] || 0;
-                            newTotal += price * item.qty;
-                        }
-                    });
-
-                    if (newTotal > 0) {
-                        provider.precio = newTotal;
-                    }
-
-                    // Actualizar ranking
-                    updateRanking();
-
-                    // Re-renderizar
-                    renderProviders();
-                    renderAnalisis();
-                    renderPrintSections();
-                    renderMatriz();
-
-                    // Mostrar notificación
-                    showNotification(`✅ Precios actualizados para ${provider.razonSocial}`);
-                }
-            }
-        }
-
-        function updateRanking() {
-            // Ordenar por precio
-            const sorted = [...providersData].sort((a, b) => a.precio - b.precio);
-
-            sorted.forEach((prov, index) => {
-                prov.rank = index + 1;
-                prov.isWinner = index === 0;
-            });
-        }
-
-        function showNotification(message) {
-            const notif = document.createElement('div');
-            notif.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background: var(--success);
-                color: white;
-                padding: 16px 24px;
-                border-radius: 12px;
-                font-weight: 600;
-                z-index: 10000;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                animation: slideIn 0.3s ease;
+            // === SUMMARY COMPARATIVE ===
+            let summaryHtml = `
+                <div class="print-comparative" id="print-comparative-summary">
+                    <div class="print-header">
+                        <h1>RESUMEN EJECUTIVO - COMPARATIVA</h1>
+                        <div class="subtitle">Marcelo Escudero - COMPARUM</div>
+                    </div>
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Proveedor</th>
+                                <th>Score</th>
+                                <th>Ítems</th>
+                                <th>Calidad</th>
+                                <th>Marca</th>
+                                <th>Precio ARS</th>
+                                <th>Precio USD</th>
+                                <th>Vs Mejor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${providersData.map(prov => {
+                                const diff = prov.precio - minPrecio;
+                                const diffPct = ((diff / minPrecio) * 100).toFixed(1);
+                                return `
+                                    <tr style="${prov.isWinner ? 'background: rgba(5,150,105,0.05);' : ''}">
+                                        <td style="font-weight: 800; font-size: 1.1rem;">${prov.rank}</td>
+                                        <td>
+                                            <strong>${prov.razonSocial}</strong>
+                                            <div style="font-size: 0.75rem; color: #666;">${prov.nombreFantasia}</div>
+                                        </td>
+                                        <td style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">${prov.scorePct}</td>
+                                        <td>${prov.itemsCotizados}/${prov.totalItems}</td>
+                                        <td>${prov.calidad}</td>
+                                        <td>${prov.marca}</td>
+                                        <td style="font-family: monospace; font-weight: 700;">$${prov.precio.toLocaleString('es-AR')}</td>
+                                        <td style="font-family: monospace; color: var(--info);">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>
+                                        <td style="color: ${diff===0 ? 'var(--success)' : 'var(--warning)'}; font-weight: 700;">
+                                            ${diff===0 ? '✓ MEJOR' : `+${diffPct}%`}
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 24px; padding: 16px; background: var(--bg); border-radius: 8px; font-size: 0.875rem; color: var(--text-secondary);">
+                        <strong>Metodología de Ranking:</strong> Score ponderado = (Cumplimiento × 50%) + (Calidad × 25%) + (Precio × 25%).
+                        Calidad: Premium=100, Standard-Plus=80, Standard=60. Precio normalizado respecto al mejor.
+                    </div>
+                    <div class="print-footer">COMPARUM - ${new Date().toLocaleDateString('es-AR')}</div>
+                </div>
             `;
-            notif.textContent = message;
-            document.body.appendChild(notif);
 
-            setTimeout(() => {
-                notif.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => notif.remove(), 300);
-            }, 3000);
+            container.innerHTML = fullHtml + summaryHtml;
         }
 
-        function printProvider(providerKey) {
-            // Ocultar todos los print-detail
-            document.querySelectorAll('.print-detail').forEach(el => {
-                el.classList.remove('active-print');
-            });
-
-            // Mostrar solo el del proveedor seleccionado
-            const printSection = document.getElementById('print-' + providerKey);
-            if (printSection) {
-                printSection.classList.add('active-print');
-
-                // Esperar un momento para que se renderice y luego imprimir
-                setTimeout(() => {
-                    window.print();
-
-                    // Limpiar después de imprimir
-                    setTimeout(() => {
-                        printSection.classList.remove('active-print');
-                    }, 500);
-                }, 100);
-            }
-        }
-
+        // ==================== UTILIDADES ====================
         function switchTab(tabId, btn) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1680,24 +1517,21 @@
             localStorage.setItem('theme', html.getAttribute('data-theme'));
         }
 
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.style.cssText = `
+                position: fixed; bottom: 20px; right: 20px; background: var(--success); color: white;
+                padding: 16px 24px; border-radius: 12px; font-weight: 600; z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease;
+            `;
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => {
+                notif.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notif.remove(), 300);
+            }, 3000);
+        }
 
-        // CSS para animaciones de notificación
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-
-        
         async function refreshExchangeRate() {
             const label = document.getElementById('usdSourceLabel');
             try {
@@ -1714,7 +1548,18 @@
             }
             updateExchangeRate();
         }
-init();
+
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+            @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        `;
+        document.head.appendChild(style);
+
+        init();
     </script>
 </body>
 </html>
