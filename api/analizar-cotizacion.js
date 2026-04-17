@@ -26,7 +26,10 @@ export default async function handler(req, res) {
 
     const uploaded = files.file || files.files || Object.values(files)[0];
     const fileObj = Array.isArray(uploaded) ? uploaded[0] : uploaded;
-    if (!fileObj) return res.status(400).json({ error: "No se recibió ningún archivo" });
+
+    if (!fileObj) {
+      return res.status(400).json({ error: "No se recibió ningún archivo" });
+    }
 
     const buffer = await fs.promises.readFile(fileObj.filepath);
     const parsed = await pdfParse(buffer);
@@ -38,11 +41,30 @@ export default async function handler(req, res) {
       messages: [
         {
           role: "system",
-          content: "Responde SOLO con JSON válido. Sin markdown. Sin texto extra.",
+          content: "Responde SOLO con JSON válido, sin markdown ni texto extra.",
         },
         {
           role: "user",
-          content: `Analiza este texto y devuelve un JSON simple con key, razonSocial, itemsCotizados, totalItems, faltantes, calidad, marca, precio, cotiza, isWinner, pendientesProyecto.\n\nTEXTO:\n${text}`,
+          content: `Devuelve un JSON con este formato:
+{
+  "key":"",
+  "razonSocial":"",
+  "nombreFantasia":"",
+  "location":"",
+  "phone":"",
+  "itemsCotizados":0,
+  "totalItems":17,
+  "faltantes":[],
+  "calidad":"",
+  "marca":"",
+  "precio":0,
+  "cotiza":[],
+  "isWinner":false,
+  "pendientesProyecto":[]
+}
+
+TEXTO:
+${text}`,
         },
       ],
     });
