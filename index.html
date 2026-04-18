@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,15 +34,14 @@
             .print-detail, .print-comparative { display: none !important; position: static !important; width: 100% !important; box-shadow: none !important; border: none !important; background: white !important; padding: 0 !important; margin: 0 !important; page-break-inside: avoid; }
             .print-detail.active-print, .print-comparative.active-print { display: block !important; }
             .print-detail *, .print-comparative * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .stat-value.success { color: #059669 !important; }
-            .stat-value.premium { color: #7c3aed !important; }
-            .check-yes { color: #059669 !important; }
-            .check-no { color: #dc2626 !important; }
+            .stat-value.success { color: #059669 !important; } .stat-value.premium { color: #7c3aed !important; }
+            .check-yes { color: #059669 !important; } .check-no { color: #dc2626 !important; }
             .check-partial { color: #d97706 !important; }
             .winner-badge { background: linear-gradient(135deg,#059669,#10b981) !important; color: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
         .print-detail, .print-comparative { display: none; background: white; padding: 40px; max-width: 100%; }
         .print-detail.active-print, .print-comparative.active-print { display: block; }
+
         .header { background: var(--surface); border-bottom: 1px solid var(--border); height: var(--header-height); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); }
         .header-left { display: flex; align-items: center; gap: 16px; }
         .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.25rem; color: var(--primary); }
@@ -56,25 +55,22 @@
         .btn-header { padding: 10px 16px; border-radius: 10px; font-weight: 700; font-size: 0.875rem; cursor: pointer; transition: all 0.3s; border: 2px solid var(--border); background: var(--surface); color: var(--text); display: inline-flex; align-items: center; gap: 8px; }
         .btn-header:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
         .btn-header.primary { background: var(--primary); color: white; border-color: var(--primary); }
-        .btn-header.primary:hover { background: var(--primary-dark); }
         .main-container { max-width: 1600px; margin: 0 auto; padding: 32px; }
         .page-title { margin-bottom: 8px; font-size: 2rem; font-weight: 800; }
         .page-subtitle { color: var(--text-muted); margin-bottom: 24px; font-size: 1.125rem; }
+
         .upload-section { background: linear-gradient(135deg, var(--primary-light), rgba(37,99,235,0.05)); border: 2px dashed var(--primary); border-radius: 16px; padding: 32px; margin-bottom: 32px; text-align: center; }
         .upload-title { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 12px; }
         .upload-area { background: var(--surface); border: 2px dashed var(--border); border-radius: 12px; padding: 48px; margin: 20px 0; cursor: pointer; transition: all 0.3s; }
         .upload-area:hover { border-color: var(--primary); background: var(--primary-light); }
         .upload-area.dragover { border-color: var(--primary); background: var(--primary-light); transform: scale(1.02); }
         .upload-icon { width: 64px; height: 64px; margin: 0 auto 16px; color: var(--primary); }
-        .upload-text { font-size: 1.125rem; color: var(--text-secondary); margin-bottom: 8px; }
-        .upload-hint { font-size: 0.875rem; color: var(--text-muted); }
         .file-input { display: none; }
         .ia-result { display: none; background: var(--surface); border-radius: 12px; padding: 24px; margin-top: 20px; border: 2px solid var(--success); text-align: left; }
         .ia-result.active { display: block; animation: fadeIn 0.5s ease; }
         .ia-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
         .ia-icon { width: 40px; height: 40px; background: var(--success); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; }
         .ia-title { font-size: 1.125rem; font-weight: 700; color: var(--success); }
-        .ia-content { color: var(--text-secondary); line-height: 1.6; }
         .uploaded-files-list { margin-top: 16px; padding: 16px; background: var(--bg); border-radius: 8px; }
         .uploaded-file { padding: 16px; background: var(--surface); border-radius: 10px; margin-bottom: 12px; border: 1px solid var(--border); }
         .file-info { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
@@ -83,6 +79,8 @@
         .file-status { font-size: 0.875rem; color: var(--text-muted); }
         .file-status.processed { color: var(--success); font-weight: 600; }
         .file-status.error { color: var(--danger); font-weight: 600; }
+        .debug-box { margin-top: 8px; padding: 10px; background: var(--danger-light); border-radius: 6px; font-size: 0.8rem; color: var(--danger); font-family: monospace; white-space: pre-wrap; }
+
         .providers-ranking { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; margin-bottom: 40px; }
         .provider-hero-card { background: var(--surface); border-radius: var(--radius-lg); padding: 28px; border: 3px solid var(--border); transition: all 0.3s; position: relative; overflow: hidden; box-shadow: var(--shadow-lg); }
         .provider-hero-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
@@ -93,7 +91,6 @@
         .rank-number { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.5rem; background: linear-gradient(135deg,var(--gold),#fbbf24); color: white; border: 3px solid var(--gold); flex-shrink: 0; }
         .rank-number.second { background: linear-gradient(135deg,#94a3b8,#cbd5e1); border-color: #94a3b8; }
         .rank-number.third { background: linear-gradient(135deg,#b45309,#d97706); border-color: #b45309; }
-        .rank-number.fourth { background: linear-gradient(135deg,var(--text-muted),var(--text-secondary)); border-color: var(--text-muted); }
         .provider-name { font-size: 1.25rem; font-weight: 800; margin-bottom: 2px; color: var(--text); }
         .provider-fantasia { font-size: 0.875rem; color: var(--text-muted); font-style: italic; margin-bottom: 4px; }
         .provider-location { display: flex; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.875rem; }
@@ -112,7 +109,6 @@
         .completitud-bar-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg,var(--success),#10b981); transition: width 0.5s ease; }
         .faltantes-list { margin-top: 12px; font-size: 0.875rem; color: var(--text-secondary); }
         .pendientes-box { margin-top: 12px; padding: 12px; background: var(--info-light); border-radius: 8px; border-left: 4px solid var(--info); }
-        .pendientes-box strong { color: var(--info); display: block; margin-bottom: 4px; }
         .detail-section { margin: 20px 0; padding: 16px; background: var(--bg); border-radius: 12px; border-left: 4px solid var(--primary); }
         .detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
         .detail-row:last-child { border-bottom: none; }
@@ -121,17 +117,14 @@
         .action-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
         .btn { padding: 14px 20px; border-radius: 10px; font-weight: 700; font-size: 0.9375rem; cursor: pointer; transition: all 0.3s; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
         .btn-whatsapp { background: #25d366; color: white; }
-        .btn-whatsapp:hover { background: #128c7e; transform: translateY(-2px); }
         .btn-print { background: linear-gradient(135deg,var(--primary),var(--primary-dark)); color: white; }
-        .btn-print:hover { background: var(--primary-dark); transform: translateY(-2px); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
         .tabs-nav { display: flex; gap: 8px; border-bottom: 3px solid var(--border); margin-bottom: 32px; background: var(--surface); padding: 8px; border-radius: 16px 16px 0 0; }
         .tab-btn { padding: 16px 28px; background: none; border: none; cursor: pointer; color: var(--text-muted); font-weight: 700; font-size: 0.9375rem; border-bottom: 3px solid transparent; margin-bottom: -3px; transition: all 0.3s; display: flex; align-items: center; gap: 10px; border-radius: 12px 12px 0 0; }
-        .tab-btn:hover { color: var(--text); background: var(--bg); }
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); background: var(--primary-light); }
         .tab-content { display: none; animation: fadeIn 0.4s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .matriz-container { display: grid; grid-template-columns: 2.5fr repeat(5, 1fr); gap: 2px; background: var(--border); border-radius: 12px; overflow: hidden; font-size: 0.875rem; }
         .matriz-header { background: var(--bg); padding: 16px 8px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; text-align: center; }
         .matriz-cell { background: var(--surface); padding: 12px 8px; text-align: center; font-weight: 600; }
@@ -142,73 +135,55 @@
         .check-partial { color: var(--warning); }
         .tag-opcional { display: inline-block; background: var(--info-light); color: var(--info); padding: 2px 8px; border-radius: 4px; font-size: 0.6875rem; font-weight: 800; margin-left: 8px; }
         .tag-pendiente { display: inline-block; background: var(--warning-light); color: var(--warning); padding: 2px 8px; border-radius: 4px; font-size: 0.6875rem; font-weight: 800; margin-left: 8px; }
+
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
         .modal-overlay.active { display: flex; }
         .modal-content { background: var(--surface); border-radius: var(--radius-lg); padding: 32px; width: 95%; max-width: 900px; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-xl); border: 1px solid var(--border); }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--border); }
         .modal-title { font-size: 1.25rem; font-weight: 700; color: var(--text); }
-        .modal-close { background: var(--bg); border: 1px solid var(--border); cursor: pointer; padding: 8px; border-radius: 8px; color: var(--text-muted); transition: all 0.2s; }
-        .modal-close:hover { background: var(--danger-light); color: var(--danger); }
+        .modal-close { background: var(--bg); border: 1px solid var(--border); cursor: pointer; padding: 8px; border-radius: 8px; color: var(--text-muted); }
         .items-editor { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-        .item-edit-header { display: grid; grid-template-columns: 50px 1fr 90px 100px 100px 50px; gap: 8px; padding: 0 12px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
         .item-edit-row { display: grid; grid-template-columns: 50px 1fr 90px 100px 100px 50px; gap: 8px; align-items: center; padding: 12px; background: var(--bg); border-radius: 8px; border: 1px solid var(--border); }
         .item-edit-row input, .item-edit-row select { padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); font-size: 0.875rem; width: 100%; }
-        .item-edit-row .btn-icon { width: 36px; height: 36px; border-radius: 8px; border: none; background: var(--danger-light); color: var(--danger); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .item-edit-row .btn-icon:hover { background: var(--danger); color: white; }
         .editor-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--border); }
-        .print-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid var(--primary); }
-        .print-header h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 8px; }
-        .print-header .subtitle { color: var(--text-muted); font-size: 1rem; margin: 4px 0; }
-        .print-header .contact { color: var(--text-muted); font-size: 0.9rem; margin-top: 8px; }
-        .items-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 20px; }
-        .items-table th, .items-table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
-        .items-table th { background: var(--bg); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
-        .items-table td { vertical-align: middle; }
-        .items-table tr:hover { background: var(--bg); }
-        .print-summary { margin-top: 30px; padding: 20px; background: var(--bg); border-radius: 8px; border: 2px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .print-footer { margin-top: 30px; text-align: center; color: var(--text-muted); font-size: 0.75rem; border-top: 1px solid var(--border); padding-top: 20px; }
-        .price-highlight { font-size: 1.3rem; font-weight: 800; }
-        .price-success { color: var(--success); }
-        .price-info { color: var(--info); }
-        .comp-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 20px; }
-        .comp-table th, .comp-table td { padding: 8px; border: 1px solid var(--border); text-align: center; }
-        .comp-table th { background: var(--bg); font-weight: 700; }
-        .comp-table td:first-child { text-align: left; font-weight: 600; }
-        .comp-table .winner-col { background: rgba(5, 150, 105, 0.08); }
+
+        .assign-provider-box { margin-top: 12px; padding: 16px; background: var(--primary-light); border-radius: 10px; border: 2px solid var(--primary); }
         .detected-item-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg); border-radius: 6px; margin-bottom: 6px; font-size: 0.85rem; border: 1px solid var(--border); }
         .detected-item-row.matched { border-left: 3px solid var(--success); }
         .detected-item-row.unmatched { border-left: 3px solid var(--warning); }
-        .assign-provider-box { margin-top: 12px; padding: 16px; background: var(--primary-light); border-radius: 10px; border: 2px solid var(--primary); }
-        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
-        .badge-success { background: var(--success-light); color: var(--success); }
-        .badge-warning { background: var(--warning-light); color: var(--warning); }
-        .spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 6px; }
+        .provider-select { width: 100%; padding: 10px; border-radius: 8px; border: 2px solid var(--primary); background: var(--surface); color: var(--text); font-size: 0.95rem; margin-bottom: 12px; }
+        .new-provider-input { width: 100%; padding: 10px; border-radius: 8px; border: 2px solid var(--primary); background: var(--surface); color: var(--text); font-size: 0.95rem; margin-bottom: 12px; }
+        .spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 6px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .new-provider-input { width: 100%; padding: 10px; border-radius: 8px; border: 2px solid var(--primary); background: var(--surface); font-size: 0.95rem; margin-top: 8px; display: none; }
-        .new-provider-input.active { display: block; }
-        .provider-select { width: 100%; padding: 10px; border-radius: 8px; border: 2px solid var(--primary); background: var(--surface); font-size: 0.95rem; margin-bottom: 12px; }
-        @media (max-width: 1024px) { .main-container { padding: 20px; } .providers-ranking { grid-template-columns: 1fr; } .matriz-container { overflow-x: auto; display: flex; flex-direction: column; } .header-actions { display: none; } }
+
+        .print-header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px solid var(--primary); }
+        .print-header h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 8px; }
+        .items-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 20px; }
+        .items-table th, .items-table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid var(--border); }
+        .items-table th { background: var(--bg); font-weight: 800; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
+        .print-summary { margin-top: 30px; padding: 20px; background: var(--bg); border-radius: 8px; border: 2px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .print-footer { margin-top: 30px; text-align: center; color: var(--text-muted); font-size: 0.75rem; border-top: 1px solid var(--border); padding-top: 20px; }
+        .comp-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 20px; }
+        .comp-table th, .comp-table td { padding: 8px; border: 1px solid var(--border); text-align: center; }
+        .comp-table td:first-child { text-align: left; font-weight: 600; }
+        .comp-table .winner-col { background: rgba(5, 150, 105, 0.08); }
+
+        @media (max-width: 1024px) { .main-container { padding: 20px; } .providers-ranking { grid-template-columns: 1fr; } .header-actions { display: none; } }
     </style>
 </head>
 <body>
     <header class="header no-print">
         <div class="header-left">
             <div class="logo">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                 <span>COMPARUM</span>
             </div>
             <span class="client-badge">Marcelo Escudero</span>
         </div>
         <div class="header-right">
             <div class="header-actions no-print">
-                <button class="btn-header" onclick="openItemsEditor()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    Editar Materiales
-                </button>
-                <button class="btn-header primary" onclick="openPrintOptions()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-                    Imprimir
-                </button>
+                <button class="btn-header" onclick="openItemsEditor()">✏️ Editar Materiales</button>
+                <button class="btn-header primary" onclick="openPrintOptions()">🖨️ Imprimir</button>
             </div>
             <div class="exchange-control">
                 <label>USD/ARS</label>
@@ -219,7 +194,7 @@
                 </div>
             </div>
             <button class="theme-toggle" onclick="toggleTheme()" style="background: none; border: none; cursor: pointer; padding: 8px; border-radius: 8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
             </button>
         </div>
     </header>
@@ -229,26 +204,19 @@
         <p class="page-subtitle no-print"><span id="totalItemsLabel">19</span> ítems | Análisis automático por IA | Ranking Inteligente</p>
 
         <div class="upload-section no-print">
-            <div class="upload-title">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                Análisis Inteligente de Cotizaciones
-            </div>
+            <div class="upload-title">📤 Análisis Inteligente de Cotizaciones</div>
             <p style="color: var(--text-secondary); margin-bottom: 16px;">
-                Subí cotizaciones en cualquier formato: <strong>PDF, imágenes, Excel, Word, CSV o TXT</strong>. 
-                El sistema extrae automáticamente precios vía IA/OCR y actualiza el ranking en tiempo real.
+                Subí cotizaciones en cualquier formato: <strong>PDF, imágenes, Excel, Word, CSV o TXT</strong>.
             </p>
-
             <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 <div class="upload-text">Arrastra archivos aquí o haz clic para seleccionar</div>
                 <div class="upload-hint">PDF, Excel, Word, Imágenes, CSV, TXT | Máx. 10MB por archivo</div>
             </div>
-
             <input type="file" id="fileInput" class="file-input" multiple accept=".pdf,.csv,.txt,.xls,.xlsx,.docx,.jpg,.jpeg,.png,.gif,.bmp,.webp" onchange="handleFiles(this.files)">
-
             <div class="ia-result" id="iaResult">
                 <div class="ia-header">
-                    <div class="ia-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+                    <div class="ia-icon">✓</div>
                     <div class="ia-title">Archivos Procesados</div>
                 </div>
                 <div class="ia-content" id="iaContent"></div>
@@ -262,18 +230,10 @@
             <button class="tab-btn active" onclick="switchTab('matriz', this)">Matriz de <span class="matriz-count">19</span> Ítems</button>
             <button class="tab-btn" onclick="switchTab('resumen', this)">Análisis</button>
         </div>
-
-        <div id="matriz" class="tab-content active no-print">
-            <div class="table-container"><div class="matriz-container" id="matrizContainer"></div></div>
-        </div>
-
+        <div id="matriz" class="tab-content active no-print"><div class="matriz-container" id="matrizContainer"></div></div>
         <div id="resumen" class="tab-content no-print">
-            <div class="table-container" style="padding: 24px;">
+            <div style="padding: 24px;">
                 <h3 style="margin-bottom: 16px;">Análisis Comparativo Inteligente</h3>
-                <p style="color: var(--text-secondary); line-height: 1.8;" id="analisisTexto">
-                    El ranking se calcula ponderando: <strong>Cumplimiento de materiales (50%)</strong> + 
-                    <strong>Calidad de marca (25%)</strong> + <strong>Mejor precio (25%)</strong>.
-                </p>
                 <div style="margin-top: 24px; background: var(--bg); padding: 20px; border-radius: 12px;">
                     <h4 style="margin-bottom: 16px;">Comparativa de Precios (ARS / USD)</h4>
                     <div style="display: grid; gap: 12px;" id="comparativaPrecios"></div>
@@ -288,18 +248,15 @@
 
     <div class="modal-overlay no-print" id="itemsEditorModal">
         <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">Editar Listado de Materiales</div>
-                <button class="modal-close" onclick="closeItemsEditor()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
-            <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 0.875rem;">Modificá los materiales a cotizar. Los cambios se guardan automáticamente y recalculan todo el ranking.</p>
+            <div class="modal-header"><div class="modal-title">Editar Listado de Materiales</div><button class="modal-close" onclick="closeItemsEditor()">✕</button></div>
+            <p style="color: var(--text-muted); margin-bottom: 16px; font-size: 0.875rem;">Modificá los materiales. Los cambios se guardan y recalculan el ranking.</p>
             <div class="items-editor" id="itemsEditor"></div>
             <div style="display: flex; gap: 12px; margin-bottom: 20px;">
                 <button class="btn btn-print" onclick="addItemRow()" style="flex: 1;">+ Añadir Ítem</button>
                 <button class="btn" onclick="resetItemsDefault()" style="flex: 1; background: var(--bg); color: var(--text); border: 2px solid var(--border);">Restablecer Default</button>
             </div>
             <div class="editor-actions">
-                <span style="color: var(--text-muted); font-size: 0.875rem;" id="editorSummary">19 ítems configurados</span>
+                <span style="color: var(--text-muted); font-size: 0.875rem;" id="editorSummary">19 ítems</span>
                 <button class="btn btn-print" onclick="saveItemsEditor()">Guardar Cambios</button>
             </div>
         </div>
@@ -307,17 +264,10 @@
 
     <div class="modal-overlay no-print" id="printOptionsModal" onclick="if(event.target===this)closePrintOptions()">
         <div class="modal-content" style="max-width: 500px;">
-            <div class="modal-header">
-                <div class="modal-title">Opciones de Impresión</div>
-                <button class="modal-close" onclick="closePrintOptions()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
+            <div class="modal-header"><div class="modal-title">Opciones de Impresión</div><button class="modal-close" onclick="closePrintOptions()">✕</button></div>
             <div style="display: flex; flex-direction: column; gap: 12px; margin: 20px 0;">
-                <button class="btn btn-print" onclick="printComparative('full')" style="justify-content: flex-start; padding: 20px;">
-                    <div style="text-align: left;"><div style="font-size: 1.1rem; margin-bottom: 4px;">Comparativa Completa</div><div style="font-size: 0.8rem; opacity: 0.8; font-weight: 400;">Todos los proveedores, matriz y precios en una sola hoja</div></div>
-                </button>
-                <button class="btn" onclick="printComparative('summary')" style="justify-content: flex-start; padding: 20px; background: var(--bg); color: var(--text); border: 2px solid var(--border);">
-                    <div style="text-align: left;"><div style="font-size: 1.1rem; margin-bottom: 4px;">Resumen Ejecutivo</div><div style="font-size: 0.8rem; font-weight: 400; color: var(--text-muted);">Ranking, scores y totales comparativos</div></div>
-                </button>
+                <button class="btn btn-print" onclick="printComparative('full')" style="justify-content: flex-start; padding: 20px;">Comparativa Completa</button>
+                <button class="btn" onclick="printComparative('summary')" style="justify-content: flex-start; padding: 20px; background: var(--bg); color: var(--text); border: 2px solid var(--border);">Resumen Ejecutivo</button>
             </div>
         </div>
     </div>
@@ -326,8 +276,9 @@
     <div id="printComparativeSection"></div>
 
 <script>
+// ======================= ESTADO GLOBAL =======================
 const exchangeRate = { value: 1390 };
-let itemsEditorData = [];
+window.uploadCache = {};
 let items = [];
 const defaultItems = [
     { id: 1, name: 'Prensacable 2"', qty: 2 }, { id: 2, name: 'Prensacable 1"', qty: 3 }, { id: 3, name: 'Prensacable 3/4"', qty: 1 },
@@ -346,645 +297,4 @@ let providersData = [
     { key: 'urquiza', rank: 1, razonSocial: 'MAS ELECTRO S.A.', nombreFantasia: 'Electro Urquiza', location: 'Mendoza Capital', phone: '+54 9 2614 53-3949', whatsapp: '5492614533949', itemsCotizados: 15, totalItems: 17, porcentaje: 88, faltantes: [9, 11], calidad: 'Standard-Plus', marca: 'CHINT', precio: 2245065.14, cotiza: [1,2,3,4,5,6,7,8,10,12,13,14,15,16,17], isWinner: true, score: 0, scorePct: '0', pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {} },
     { key: 'powerstore', rank: 2, razonSocial: 'ENERSHOP S.R.L.', nombreFantasia: 'PowerStore', location: 'Maipú, Mendoza', phone: '261 5686061', whatsapp: '542615686061', itemsCotizados: 15, totalItems: 17, porcentaje: 88, faltantes: [3, 11], calidad: 'Standard-Plus', marca: 'CHINT', precio: 2598778.22, cotiza: [1,2,4,5,6,7,8,9,10,12,13,14,15,16,17], isWinner: false, score: 0, scorePct: '0', pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {} },
     { key: 'norte', rank: 3, razonSocial: "D'IN NORTE S.A.", nombreFantasia: "D'In Norte", location: 'Las Heras, Mendoza', phone: '2617101111', whatsapp: '542617101111', itemsCotizados: 15, totalItems: 17, porcentaje: 88, faltantes: [9, 11], calidad: 'Standard', marca: 'CHINT/Genérico', precio: 2560920.71, cotiza: [1,2,3,4,5,6,7,8,10,12,13,14,15,16,17], isWinner: false, score: 0, scorePct: '0', pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {} },
-    { key: 'premium', rank: 4, razonSocial: 'ELECTRO PERBE S.A.', nombreFantasia: 'Premium Electric', location: 'Pilar, Buenos Aires', phone: '+54 9 11 2353-9547', whatsapp: '5491123539547', itemsCotizados: 14, totalItems: 17, porcentaje: 82, faltantes: [5, 9, 11], calidad: 'Premium', marca: 'ABB', precio: 2389070.60, cotiza: [1,2,3,4,6,7,8,10,12,13,14,15,16,17], isWinner: false, score: 0, scorePct: '0', pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {} },
-    { key: 'genco', rank: 5, razonSocial: 'GENCOELEC S.A.', nombreFantasia: 'Genco Materiales', location: 'General Gutiérrez, Mendoza', phone: '+54261481-1460', whatsapp: '542614811460', itemsCotizados: 11, totalItems: 17, porcentaje: 65, faltantes: [5,6,7,8,9,10], calidad: 'Standard', marca: 'Varias', precio: 1950201.10, cotiza: [1,2,3,4,11,12,13,14,15,16,17], isWinner: false, score: 0, scorePct: '0', pendientes: 'Solicitar cotización de BGH SPC01 y UTP CAT6 Exterior', preciosItems: {} }
-];
-
-const uploadCache = {};
-
-function init() {
-    const savedItems = localStorage.getItem('comparum_items');
-    items = savedItems ? JSON.parse(savedItems) : JSON.parse(JSON.stringify(defaultItems));
-    const savedRate = localStorage.getItem('exchangeRate');
-    if (savedRate) { exchangeRate.value = parseFloat(savedRate); document.getElementById('exchangeRateInput').value = savedRate; }
-    updateTotalItemsLabel();
-    fullRecalculate();
-}
-
-function updateTotalItemsLabel() {
-    document.getElementById('totalItemsLabel').textContent = items.length;
-    document.querySelectorAll('.matriz-count').forEach(el => el.textContent = items.length);
-}
-
-function updateExchangeRate() {
-    const val = document.getElementById('exchangeRateInput').value;
-    exchangeRate.value = parseFloat(val);
-    localStorage.setItem('exchangeRate', val);
-    fullRecalculate();
-}
-
-function fullRecalculate() {
-    calculateRanking();
-    renderProviders();
-    renderMatriz();
-    renderAnalisis();
-    renderPrintSections();
-    renderPrintComparative();
-}
-
-function calculateRanking() {
-    const activeItems = items.filter(i => !i.inactive);
-    const totalItemsCount = activeItems.length;
-    const minPrecio = Math.min(...providersData.map(p => p.precio || Infinity)) || 1;
-    providersData.forEach(prov => {
-        prov.totalItems = totalItemsCount;
-        prov.cotiza = [...new Set(prov.cotiza.filter(id => activeItems.some(i => i.id === id)))];
-        prov.itemsCotizados = prov.cotiza.length;
-        prov.faltantes = activeItems.filter(i => !i.pendiente && !prov.cotiza.includes(i.id)).map(i => i.id);
-        const cumplimiento = totalItemsCount > 0 ? (prov.itemsCotizados / totalItemsCount) : 0;
-        let calidadScore = 0.5;
-        const c = (prov.calidad || '').toLowerCase();
-        if (c.includes('premium')) calidadScore = 1.0;
-        else if (c.includes('plus')) calidadScore = 0.8;
-        else if (c.includes('standard')) calidadScore = 0.6;
-        const precioScore = minPrecio / (prov.precio || Infinity);
-        prov.score = (cumplimiento * 0.50) + (calidadScore * 0.25) + (precioScore * 0.25);
-        prov.scorePct = (prov.score * 100).toFixed(1);
-    });
-    providersData.sort((a, b) => b.score - a.score);
-    providersData.forEach((prov, index) => { prov.rank = index + 1; prov.isWinner = index === 0; });
-}
-
-// ======================= RENDER =======================
-function renderProviders() {
-    const container = document.getElementById('providersRanking');
-    container.innerHTML = '';
-    const minPrecio = Math.min(...providersData.map(p => p.precio));
-    providersData.forEach(prov => {
-        const diff = prov.precio - minPrecio;
-        const diffPct = ((diff / minPrecio) * 100).toFixed(1);
-        const rankClass = prov.rank === 1 ? '' : prov.rank === 2 ? 'second' : prov.rank === 3 ? 'third' : 'fourth';
-        const card = document.createElement('div');
-        card.className = `provider-hero-card ${prov.isWinner ? 'winner-card' : ''}`;
-        card.innerHTML = `
-            ${prov.isWinner ? '<div class="winner-badge">RECOMENDADO</div>' : ''}
-            <div class="provider-score" title="Score ponderado">${prov.scorePct}</div>
-            <div class="rank-header">
-                <div class="rank-number ${rankClass}">${prov.rank}</div>
-                <div style="margin-left: 50px;">
-                    <div class="provider-name">${prov.razonSocial}</div>
-                    <div class="provider-fantasia">${prov.nombreFantasia}</div>
-                    <div class="provider-location">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        ${prov.location}
-                    </div>
-                </div>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-box ${prov.isWinner ? 'primary' : ''}"><div class="stat-value ${prov.isWinner ? 'success' : ''}">${prov.itemsCotizados}/${prov.totalItems}</div><div class="stat-label">Ítems Cotizados</div></div>
-                <div class="stat-box ${prov.calidad === 'Premium' ? 'premium' : ''}"><div class="stat-value ${prov.calidad === 'Premium' ? 'premium' : ''}">${prov.calidad}</div><div class="stat-label">Calidad</div></div>
-                <div class="stat-box ${prov.isWinner ? 'primary' : ''}"><div class="stat-value ${prov.isWinner ? 'success' : ''}">$${(prov.precio/1000000).toFixed(2)}M <span style="font-size:0.7rem">ARS</span></div><div class="stat-label">Precio Total</div></div>
-                <div class="stat-box"><div class="stat-value" style="font-size: 1.25rem;">${prov.marca}</div><div class="stat-label">Marca</div></div>
-            </div>
-            <div class="completitud-section">
-                <div class="completitud-header"><span style="font-weight: 700;">Materiales Cotizados</span><span class="completitud-pct">${prov.itemsCotizados}/${prov.totalItems}</span></div>
-                <div class="completitud-bar-bg"><div class="completitud-bar-fill" style="width: ${(prov.itemsCotizados/prov.totalItems*100).toFixed(0)}%"></div></div>
-                <div class="faltantes-list"><strong style="color: var(--danger);">Faltan:</strong> Ítems ${prov.faltantes.join(', ')}</div>
-                <div class="pendientes-box"><strong>Pendientes:</strong><div>${prov.pendientes}</div></div>
-            </div>
-            <div class="detail-section">
-                <div class="detail-row"><span class="detail-label">Precio Total ARS</span><span class="detail-value" style="font-family: monospace; font-size: 1.25rem; font-weight: 800;">$ ${prov.precio.toLocaleString('es-AR')}</span></div>
-                <div class="detail-row"><span class="detail-label">Precio Total USD</span><span class="detail-value" style="font-family: monospace; font-size: 1.25rem; font-weight: 800; color: var(--info);">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span></div>
-                <div class="detail-row"><span class="detail-label">Diferencia vs Mejor</span><span class="detail-value" style="color: ${diff===0?'var(--success)':'var(--warning)'}; font-weight: 800;">${diff===0?'✓ MEJOR PRECIO':`+$${diff.toLocaleString('es-AR')} ARS (+${diffPct}%)`}</span></div>
-                <div class="detail-row"><span class="detail-label">Score</span><span class="detail-value" style="color: var(--primary);">${prov.scorePct}/100</span></div>
-                <div class="detail-row"><span class="detail-label">Contacto</span><span class="detail-value">${prov.phone}</span></div>
-            </div>
-            <div class="action-buttons no-print">
-                <a href="https://wa.me/${prov.whatsapp}?text=Hola%20${encodeURIComponent(prov.razonSocial)},%20somos%20Hormiserv%20SRL.%20Nos%20interesa%20su%20cotización." target="_blank" class="btn btn-whatsapp">WhatsApp</a>
-                <button class="btn btn-print" onclick="printProvider('${prov.key}')">Imprimir / PDF</button>
-            </div>`;
-        container.appendChild(card);
-    });
-}
-
-function renderMatriz() {
-    const container = document.getElementById('matrizContainer');
-    let html = `<div class="matriz-header" style="text-align: left; padding-left: 16px;">Material / Ítem</div>
-        <div class="matriz-header">MAS ELECTRO S.A.</div><div class="matriz-header">ENERSHOP S.R.L.</div>
-        <div class="matriz-header">D'IN NORTE S.A.</div><div class="matriz-header">ELECTRO PERBE S.A.</div><div class="matriz-header">GENCOELEC S.A.</div>`;
-    items.forEach(item => {
-        if (item.inactive) return;
-        const tag = item.opcional ? '<span class="tag-opcional">OPC</span>' : item.pendiente ? '<span class="tag-pendiente">PEND</span>' : '';
-        html += `<div class="matriz-cell product" style="${item.pendiente ? 'background: var(--info-light);' : ''}"><strong>${item.name}</strong>${tag}<div style="font-size: 0.75rem; color: var(--text-muted);">Cant: ${item.qty}</div></div>`;
-        providersData.forEach(prov => {
-            if (item.pendiente) html += `<div class="matriz-cell pendiente"><span class="check-partial">⏳ PEND</span></div>`;
-            else if (prov.cotiza.includes(item.id)) html += `<div class="matriz-cell"><span class="check-yes">✓</span></div>`;
-            else html += `<div class="matriz-cell" style="background: rgba(220,38,38,0.05);"><span class="check-no">✗</span></div>`;
-        });
-    });
-    container.innerHTML = html;
-}
-
-function renderAnalisis() {
-    const containerPrecios = document.getElementById('comparativaPrecios');
-    const containerRanking = document.getElementById('rankingDetallado');
-    const minPrecio = Math.min(...providersData.map(p => p.precio));
-    containerPrecios.innerHTML = providersData.map(prov => {
-        const diff = prov.precio - minPrecio;
-        const isWinner = prov.precio === minPrecio;
-        return `<div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--surface); border-radius: 8px; ${isWinner ? 'border: 2px solid var(--success);' : ''}">
-            <div><strong>${prov.razonSocial}</strong><div style="font-size: 0.8rem; color: var(--text-muted);">${prov.nombreFantasia}</div></div>
-            <div style="text-align: right;">
-                <div style="font-family: monospace; font-weight: 700; font-size: 1.1rem;">$ ${prov.precio.toLocaleString('es-AR')}</div>
-                <div style="font-family: monospace; color: var(--info); font-size: 0.9rem;">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
-                ${isWinner ? '<span style="color: var(--success); font-size: 0.75rem; font-weight: 700;">✓ MEJOR PRECIO</span>' : `<span style="color: var(--warning); font-size: 0.75rem;">+$${diff.toLocaleString('es-AR')}</span>`}
-            </div>
-        </div>`;
-    }).join('');
-    containerRanking.innerHTML = providersData.map(prov => `
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); ${prov.isWinner ? 'border-left: 4px solid var(--success);' : ''}">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 32px; height: 32px; border-radius: 50%; background: ${prov.isWinner ? 'var(--success)' : 'var(--bg)'}; color: ${prov.isWinner ? 'white' : 'var(--text-muted)'}; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.875rem;">${prov.rank}</div>
-                <div><div style="font-weight: 700;">${prov.razonSocial}</div><div style="font-size: 0.75rem; color: var(--text-muted);">${prov.calidad} • ${prov.marca}</div></div>
-            </div>
-            <div style="text-align: right;">
-                <div style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">${prov.scorePct}<span style="font-size: 0.7rem; color: var(--text-muted);">/100</span></div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">${prov.itemsCotizados}/${prov.totalItems} ítems • $${(prov.precio/1000000).toFixed(2)}M</div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// ======================= EDITOR =======================
-function openItemsEditor() { itemsEditorData = JSON.parse(JSON.stringify(items)); renderItemsEditor(); document.getElementById('itemsEditorModal').classList.add('active'); }
-function closeItemsEditor() { document.getElementById('itemsEditorModal').classList.remove('active'); }
-function renderItemsEditor() {
-    const container = document.getElementById('itemsEditor');
-    let html = `<div class="item-edit-header"><div>N°</div><div>Material / Descripción</div><div>Cantidad</div><div>Tipo</div><div>Estado</div><div></div></div>`;
-    itemsEditorData.forEach((item, idx) => {
-        html += `<div class="item-edit-row" data-idx="${idx}">
-            <input type="number" value="${item.id}" readonly style="background: var(--bg); text-align: center; font-weight: 700;">
-            <input type="text" value="${item.name.replace(/"/g, '&quot;')}" onchange="updateItemField(${idx}, 'name', this.value)" placeholder="Nombre del material">
-            <input type="number" value="${item.qty}" onchange="updateItemField(${idx}, 'qty', parseInt(this.value)||1)" style="text-align: center;">
-            <select onchange="updateItemField(${idx}, 'tipo', this.value)">
-                <option value="normal" ${!item.opcional && !item.pendiente ? 'selected' : ''}>Normal</option>
-                <option value="opcional" ${item.opcional ? 'selected' : ''}>Opcional</option>
-                <option value="pendiente" ${item.pendiente ? 'selected' : ''}>Pendiente</option>
-            </select>
-            <select onchange="updateItemField(${idx}, 'estado', this.value)">
-                <option value="activo" ${!item.inactive ? 'selected' : ''}>Activo</option>
-                <option value="inactivo" ${item.inactive ? 'selected' : ''}>Inactivo</option>
-            </select>
-            <button class="btn-icon" onclick="removeItemRow(${idx})" title="Eliminar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-        </div>`;
-    });
-    container.innerHTML = html;
-    document.getElementById('editorSummary').textContent = `${itemsEditorData.length} ítems configurados`;
-}
-function updateItemField(idx, field, value) {
-    if (field === 'tipo') { itemsEditorData[idx].opcional = (value === 'opcional'); itemsEditorData[idx].pendiente = (value === 'pendiente'); }
-    else if (field === 'estado') { itemsEditorData[idx].inactive = (value === 'inactivo'); }
-    else { itemsEditorData[idx][field] = value; }
-}
-function removeItemRow(idx) { itemsEditorData.splice(idx, 1); itemsEditorData.forEach((item, i) => item.id = i + 1); renderItemsEditor(); }
-function addItemRow() { const newId = itemsEditorData.length > 0 ? Math.max(...itemsEditorData.map(i => i.id)) + 1 : 1; itemsEditorData.push({ id: newId, name: 'Nuevo material', qty: 1 }); renderItemsEditor(); }
-function resetItemsDefault() { if (confirm('¿Restablecer el listado original? Se perderán los cambios personalizados.')) { itemsEditorData = JSON.parse(JSON.stringify(defaultItems)); renderItemsEditor(); } }
-function saveItemsEditor() {
-    items = JSON.parse(JSON.stringify(itemsEditorData));
-    localStorage.setItem('comparum_items', JSON.stringify(items));
-    closeItemsEditor(); updateTotalItemsLabel(); fullRecalculate();
-    showNotification('✅ Materiales actualizados y ranking recalculado');
-}
-
-// ======================= FUZZY MATCHING =======================
-function normalizeText(str) {
-    return String(str).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
-}
-function similarity(a, b) {
-    const s1 = normalizeText(a), s2 = normalizeText(b);
-    if (s1 === s2) return 1;
-    if (s1.includes(s2) || s2.includes(s1)) return 0.85;
-    const words1 = s1.split(' ').filter(w => w.length > 2);
-    const words2 = s2.split(' ').filter(w => w.length > 2);
-    const common = words1.filter(w => words2.includes(w)).length;
-    return words1.length && words2.length ? (common / Math.max(words1.length, words2.length)) : 0;
-}
-function findBestItemMatch(description) {
-    let best = null, bestScore = 0.30;
-    items.forEach(item => {
-        if (item.inactive) return;
-        const score = similarity(item.name, description);
-        if (score > bestScore) { bestScore = score; best = item; }
-    });
-    return best ? { item: best, score: bestScore } : null;
-}
-function guessProviderKey(text) {
-    const t = text.toLowerCase();
-    if (t.includes('urquiza') || t.includes('mas electro')) return 'urquiza';
-    if (t.includes('power') || t.includes('enershop')) return 'powerstore';
-    if (t.includes('norte') || t.includes("d'in")) return 'norte';
-    if (t.includes('perbe') || t.includes('premium')) return 'premium';
-    if (t.includes('genco')) return 'genco';
-    return '';
-}
-
-// ======================= UPLOAD CORREGIDO =======================
-function handleDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('dragover'); }
-function handleDragLeave(e) { e.currentTarget.classList.remove('dragover'); }
-function handleDrop(e) { e.preventDefault(); e.currentTarget.classList.remove('dragover'); handleFiles(e.dataTransfer.files); }
-
-async function handleFiles(files) {
-    if (!files || files.length === 0) return;
-    const resultDiv = document.getElementById('iaResult');
-    const contentDiv = document.getElementById('iaContent');
-    const filesListDiv = document.getElementById('uploadedFilesList');
-    resultDiv.classList.add('active');
-    contentDiv.innerHTML = '<p style="color: var(--text-muted);"><span class="spinner"></span> Procesando archivos...</p>';
-    filesListDiv.innerHTML = '';
-
-    for (const file of Array.from(files)) {
-        const fileId = 'file-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-        addFileToList(file, fileId);
-        try {
-            const ext = file.name.split('.').pop().toLowerCase();
-            let result = { items: [], providerName: '', source: ext };
-            if (['csv','txt'].includes(ext)) result = await processTextFile(file);
-            else if (['pdf'].includes(ext)) result = await processBackendFile(file, 'pdf');
-            else if (['jpg','jpeg','png','gif','bmp','webp'].includes(ext)) result = await processBackendFile(file, 'image');
-            else if (['xlsx','xls'].includes(ext)) result = await processExcelFile(file);
-            else if (['docx'].includes(ext)) result = await processDocxFile(file);
-            else throw new Error('Formato no soportado');
-
-            // Guardar en caché global SIEMPRE
-            uploadCache[fileId] = result;
-
-            updateFileStatus(fileId, result);
-            renderAssignBox(fileId, result, file.name);
-
-        } catch (error) {
-            console.error(error);
-            updateFileStatus(fileId, { error: error.message || 'Error de procesamiento' });
-        }
-    }
-    contentDiv.innerHTML = `<p>✅ <strong>Proceso completado</strong></p><p style="margin-top: 8px; font-size: 0.9rem;">Seleccioná un proveedor para cada archivo y clickeá "Aplicar Precios".</p>`;
-}
-
-function addFileToList(file, fileId) {
-    const filesListDiv = document.getElementById('uploadedFilesList');
-    const fileDiv = document.createElement('div');
-    fileDiv.className = 'uploaded-file';
-    fileDiv.id = fileId;
-    fileDiv.innerHTML = `
-        <div class="file-info">
-            <div class="file-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div>
-            <div><div class="file-name">${file.name}</div><div class="file-status" id="status-${fileId}"><span class="spinner"></span> Procesando...</div></div>
-        </div>
-        <div style="font-size: 0.8rem; color: var(--text-muted); flex-shrink:0;">${(file.size/1024).toFixed(1)} KB</div>`;
-    filesListDiv.appendChild(fileDiv);
-}
-
-function updateFileStatus(fileId, data) {
-    const statusEl = document.getElementById('status-' + fileId);
-    if (!statusEl) return;
-    if (data.error) { statusEl.innerHTML = '<span style="color:var(--danger); font-weight:600;">⚠️ ' + data.error + '</span>'; statusEl.className = 'file-status error'; }
-    else if (data.items && data.items.length > 0) { statusEl.innerHTML = `✓ <strong>${data.items.length}</strong> ítems detectados`; statusEl.className = 'file-status processed'; }
-    else { statusEl.innerHTML = 'ℹ️ No se detectaron ítems con precios'; }
-}
-
-function renderAssignBox(fileId, data, filename) {
-    const fileDiv = document.getElementById(fileId);
-    if (!fileDiv) return;
-    let existing = fileDiv.querySelector('.assign-provider-box');
-    if (existing) existing.remove();
-
-    const suggestedKey = guessProviderKey(filename + ' ' + (data.providerName || ''));
-    const selectId = 'sel-' + fileId;
-    const newInputId = 'new-' + fileId;
-    const previewId = 'preview-' + fileId;
-
-    const box = document.createElement('div');
-    box.className = 'assign-provider-box';
-    box.innerHTML = `
-        <div style="font-weight: 700; margin-bottom: 10px; color: var(--primary); font-size: 1rem;">🎯 Asignar cotización a proveedor</div>
-        <select id="${selectId}" class="provider-select" onchange="toggleNewProviderInput('${selectId}', '${newInputId}')">
-            <option value="">-- Seleccionar proveedor --</option>
-            ${providersData.map(p => `<option value="${p.key}" ${p.key === suggestedKey ? 'selected' : ''}>${p.razonSocial} (${p.nombreFantasia})</option>`).join('')}
-            <option value="___NEW___">➕ Crear nuevo proveedor...</option>
-        </select>
-        <input type="text" id="${newInputId}" class="new-provider-input" placeholder="Nombre del nuevo proveedor">
-        <div id="${previewId}" style="margin-bottom: 12px; max-height: 220px; overflow-y: auto;"></div>
-        <button class="btn btn-print" onclick="applyFileToProvider('${fileId}', '${selectId}', '${newInputId}')" style="width: 100%; font-size: 1rem;">✓ Aplicar Precios y Recalcular Ranking</button>
-    `;
-    fileDiv.appendChild(box);
-
-    const previewDiv = box.querySelector('#' + previewId);
-    const displayItems = (data.items || []).slice(0, 12);
-    if (displayItems.length === 0) {
-        previewDiv.innerHTML = '<div style="color: var(--warning); font-size: 0.9rem;">No se detectaron ítems estructurados. Revisá manualmente.</div>';
-    } else {
-        previewDiv.innerHTML = displayItems.map(it => {
-            const match = it.matchedItemId ? items.find(i => i.id === it.matchedItemId) : null;
-            const cls = match ? 'matched' : 'unmatched';
-            return `<div class="detected-item-row ${cls}">
-                <div><strong>${it.description.substring(0, 45)}</strong>${it.description.length > 45 ? '...' : ''}</div>
-                <div style="font-family: monospace; white-space: nowrap;">$${Math.round(it.unitPrice).toLocaleString('es-AR')} ${match ? '→ ' + match.name.substring(0,20) : '(sin match)'}</div>
-            </div>`;
-        }).join('') + (data.items.length > 12 ? `<div style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 4px;">... y ${data.items.length - 12} ítems más</div>` : '');
-    }
-}
-
-function toggleNewProviderInput(selectId, inputId) {
-    const sel = document.getElementById(selectId);
-    const inp = document.getElementById(inputId);
-    if (sel.value === '___NEW___') inp.classList.add('active');
-    else inp.classList.remove('active');
-}
-
-function applyFileToProvider(fileId, selectId, newInputId) {
-    const sel = document.getElementById(selectId);
-    const key = sel.value;
-    if (!key) { alert('Seleccioná un proveedor'); return; }
-
-    const result = uploadCache[fileId];
-    if (!result || !result.items) { alert('No hay datos para aplicar. Reprocesá el archivo.'); return; }
-
-    let provider;
-    if (key === '___NEW___') {
-        const newName = document.getElementById(newInputId).value.trim();
-        if (!newName) { alert('Ingresá el nombre del nuevo proveedor'); return; }
-        const newKey = 'prov_' + Date.now();
-        provider = {
-            key: newKey, rank: 0, razonSocial: newName, nombreFantasia: newName, location: '-', phone: '-', whatsapp: '',
-            itemsCotizados: 0, totalItems: 0, porcentaje: 0, faltantes: [], calidad: 'Standard', marca: '-',
-            precio: 0, cotiza: [], isWinner: false, score: 0, scorePct: '0', pendientes: '-', preciosItems: {}
-        };
-        providersData.push(provider);
-    } else {
-        provider = providersData.find(p => p.key === key);
-    }
-
-    if (!provider) { alert('Proveedor no encontrado'); return; }
-
-    let updatedCount = 0;
-    result.items.forEach(it => {
-        const targetId = it.matchedItemId || it.id;
-        if (!targetId) return;
-        if (it.unitPrice > 0) {
-            provider.preciosItems[targetId] = it.unitPrice;
-            updatedCount++;
-        }
-        if (!provider.cotiza.includes(targetId)) provider.cotiza.push(targetId);
-    });
-
-    // Recalcular precio total del proveedor
-    let newTotal = 0;
-    provider.cotiza.forEach(itemId => {
-        const item = items.find(i => i.id === itemId && !i.inactive);
-        if (item) {
-            const price = provider.preciosItems[itemId] || preciosBase[itemId] || 0;
-            newTotal += price * item.qty;
-        }
-    });
-    if (newTotal > 0) provider.precio = newTotal;
-
-    // Feedback visual
-    const fileDiv = document.getElementById(fileId);
-    const box = fileDiv.querySelector('.assign-provider-box');
-    if (box) {
-        box.innerHTML = `<div style="color: var(--success); font-weight: 700; text-align: center; padding: 12px;">✓ Aplicado a <strong>${provider.razonSocial}</strong> — ${updatedCount} ítems actualizados</div>`;
-        box.style.background = 'var(--success-light)';
-        box.style.borderColor = 'var(--success)';
-    }
-
-    fullRecalculate();
-    showNotification(`✅ ${provider.razonSocial} actualizado (${updatedCount} ítems) — Ranking recalculado`);
-}
-
-// ======================= PARSEADORES =======================
-function processTextFile(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = e => {
-            try {
-                const content = e.target.result;
-                const lines = content.split(/\r?\n/).filter(l => l.trim() !== '');
-                const delimiter = lines[0] && lines[0].includes(';') ? ';' : lines[0] && lines[0].includes('\t') ? '\t' : ',';
-                const detectedItems = [];
-                let providerName = '';
-                lines.forEach((line, idx) => {
-                    const cols = line.split(delimiter).map(c => c.trim().replace(/^["']|["']$/g, ''));
-                    if (idx < 3 && cols[0] && cols[0].length > 3 && cols[0].length < 60 && !cols[0].match(/^\d+$/)) providerName = cols[0];
-                    let desc = '', qty = 1, price = 0;
-                    if (cols.length >= 3) {
-                        desc = cols[1] || cols[0];
-                        for (let c of cols) { const q = parseInt(c); if (!isNaN(q) && q > 0 && q < 10000 && !c.includes('.')) { qty = q; break; } }
-                        for (let i = cols.length - 1; i >= 0; i--) {
-                            const c = cols[i].replace(/\$/g, '').replace(/\./g, '').replace(',', '.').trim();
-                            const n = parseFloat(c);
-                            if (!isNaN(n) && n > 100) { price = n; break; }
-                        }
-                    } else {
-                        const priceMatch = line.match(/(\d[\d.,]*)\s*$/);
-                        if (priceMatch) { price = parseFloat(priceMatch[1].replace(/\./g, '').replace(',', '.')); desc = line.replace(priceMatch[0], '').trim(); }
-                    }
-                    if (price > 100) {
-                        const match = findBestItemMatch(desc);
-                        detectedItems.push({ description: desc.substring(0, 80), qty, unitPrice: price, totalPrice: price * qty, matchedItemId: match ? match.item.id : null });
-                    }
-                });
-                resolve({ providerName, items: detectedItems, source: 'csv' });
-            } catch (err) { reject(err); }
-        };
-        reader.onerror = () => reject(new Error('Error leyendo archivo'));
-        reader.readAsText(file);
-    });
-}
-
-async function processExcelFile(file) {
-    const data = await file.arrayBuffer();
-    const workbook = XLSX.read(data, { type: 'array' });
-    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1, blankrows: false });
-    const detectedItems = [];
-    let providerName = '';
-    jsonData.forEach((row, idx) => {
-        if (!Array.isArray(row)) return;
-        if (idx < 3 && row[0]) { const cell = String(row[0]).trim(); if (cell.length > 3 && cell.length < 60 && !cell.match(/^\d+$/)) providerName = cell; }
-        let desc = '', qty = 1, price = 0;
-        if (row.length >= 3) {
-            desc = String(row[1] || row[0] || '');
-            for (let i = 1; i < row.length; i++) { const v = parseInt(row[i]); if (!isNaN(v) && v > 0 && v < 10000) { qty = v; break; } }
-            for (let i = row.length - 1; i >= 0; i--) {
-                const raw = String(row[i] || '').replace(/\$/g, '').replace(/\./g, '').replace(',', '.').trim();
-                const n = parseFloat(raw);
-                if (!isNaN(n) && n > 100) { price = n; break; }
-            }
-        }
-        if (price > 100) {
-            const match = findBestItemMatch(desc);
-            detectedItems.push({ description: desc.substring(0, 80), qty, unitPrice: price, totalPrice: price * qty, matchedItemId: match ? match.item.id : null });
-        }
-    });
-    return { providerName, items: detectedItems, source: 'excel' };
-}
-
-async function processDocxFile(file) {
-    const arrayBuffer = await file.arrayBuffer();
-    const result = await mammoth.extractRawText({ arrayBuffer });
-    const lines = result.value.split(/\r?\n/).filter(l => l.trim() !== '');
-    const detectedItems = [];
-    let providerName = '';
-    lines.forEach((line, idx) => {
-        const cols = line.split(/[;,\t]/).map(c => c.trim());
-        let desc = '', qty = 1, price = 0;
-        if (cols.length >= 3) {
-            desc = cols[1] || cols[0];
-            for (let c of cols) { const q = parseInt(c); if (!isNaN(q) && q > 0 && q < 10000) { qty = q; break; } }
-            for (let i = cols.length - 1; i >= 0; i--) {
-                const c = cols[i].replace(/\$/g, '').replace(/\./g, '').replace(',', '.').trim();
-                const n = parseFloat(c);
-                if (!isNaN(n) && n > 100) { price = n; break; }
-            }
-        } else {
-            const priceMatch = line.match(/(\d[\d.,]*)\s*$/);
-            if (priceMatch) { price = parseFloat(priceMatch[1].replace(/\./g, '').replace(',', '.')); desc = line.replace(priceMatch[0], '').trim(); }
-        }
-        if (idx < 3 && !providerName && desc.length > 3 && desc.length < 60) providerName = desc;
-        if (price > 100) {
-            const match = findBestItemMatch(desc);
-            detectedItems.push({ description: desc.substring(0, 80), qty, unitPrice: price, totalPrice: price * qty, matchedItemId: match ? match.item.id : null });
-        }
-    });
-    return { providerName, items: detectedItems, source: 'docx' };
-}
-
-async function processBackendFile(file, type) {
-    const arrayBuffer = await file.arrayBuffer();
-    const response = await fetch('/api/analizar-cotizacion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/octet-stream', 'X-File-Name': encodeURIComponent(file.name), 'X-File-Type': type },
-        body: new Uint8Array(arrayBuffer)
-    });
-    if (!response.ok) throw new Error('Error del servidor (' + response.status + ')');
-    const data = await response.json();
-    if (!data.ok) throw new Error(data.debug?.error || 'Error en análisis');
-
-    const backendParsed = data.parsed || {};
-    const itemsDetected = [];
-
-    if (backendParsed.extractedItems && Array.isArray(backendParsed.extractedItems)) {
-        backendParsed.extractedItems.forEach(it => {
-            if (it.unitPrice > 0) {
-                let matchedId = it.matchedItemId || null;
-                if (!matchedId && it.description) {
-                    const localMatch = findBestItemMatch(it.description);
-                    if (localMatch) matchedId = localMatch.item.id;
-                }
-                itemsDetected.push({ id: it.id || matchedId, description: it.description || '', qty: it.qty || 1, unitPrice: it.unitPrice, totalPrice: it.totalPrice || it.unitPrice * (it.qty || 1), matchedItemId: matchedId });
-            }
-        });
-    } else if (backendParsed.cotiza && Array.isArray(backendParsed.cotiza)) {
-        backendParsed.cotiza.forEach(line => {
-            const match = findBestItemMatch(line);
-            const priceMatch = line.match(/(\d[\d.,]*)\s*$/);
-            const price = priceMatch ? parseFloat(priceMatch[1].replace(/\./g, '').replace(',', '.')) : 0;
-            itemsDetected.push({ description: line.substring(0, 80), qty: 1, unitPrice: price, totalPrice: price, matchedItemId: match ? match.item.id : null });
-        });
-    }
-
-    return { providerName: backendParsed.razonSocial || backendParsed.nombreFantasia || '', items: itemsDetected, source: type, raw: backendParsed };
-}
-
-// ======================= IMPRESIÓN =======================
-function openPrintOptions() { document.getElementById('printOptionsModal').classList.add('active'); }
-function closePrintOptions() { document.getElementById('printOptionsModal').classList.remove('active'); }
-function printComparative(type) {
-    closePrintOptions();
-    document.querySelectorAll('.print-detail, .print-comparative').forEach(el => el.classList.remove('active-print'));
-    const sectionId = type === 'full' ? 'print-comparative-full' : 'print-comparative-summary';
-    const section = document.getElementById(sectionId);
-    if (section) { section.classList.add('active-print'); setTimeout(() => { window.print(); setTimeout(() => section.classList.remove('active-print'), 500); }, 200); }
-}
-function printProvider(providerKey) {
-    document.querySelectorAll('.print-detail, .print-comparative').forEach(el => el.classList.remove('active-print'));
-    const printSection = document.getElementById('print-' + providerKey);
-    if (printSection) { printSection.classList.add('active-print'); setTimeout(() => { window.print(); setTimeout(() => printSection.classList.remove('active-print'), 500); }, 100); }
-}
-
-function renderPrintSections() {
-    const container = document.getElementById('printSections');
-    const activeItems = items.filter(i => !i.inactive);
-    const minPrecio = Math.min(...providersData.map(p => p.precio));
-    container.innerHTML = providersData.map(prov => {
-        const diff = prov.precio - minPrecio;
-        const diffPct = ((diff / minPrecio) * 100).toFixed(1);
-        return `
-            <div class="print-detail" id="print-${prov.key}">
-                <div class="print-header"><h1>${prov.razonSocial}</h1><div class="subtitle">${prov.nombreFantasia}</div><div class="subtitle">${prov.location}</div><div class="contact">Tel: ${prov.phone}</div></div>
-                <h3 style="margin-bottom: 20px;">Detalle de Cotización - ${activeItems.length} Ítems</h3>
-                <table class="items-table"><thead><tr><th style="width:5%">N°</th><th style="width:35%">Material</th><th style="width:8%; text-align:center;">Cant.</th><th style="width:14%; text-align:right;">Precio Unit. ARS</th><th style="width:14%; text-align:right;">Precio Unit. USD</th><th style="width:12%; text-align:right;">Total ARS</th><th style="width:12%; text-align:center;">Estado</th></tr></thead><tbody>
-                    ${activeItems.map(item => {
-                        const precioUnit = prov.preciosItems[item.id] || preciosBase[item.id] || 0;
-                        const totalARS = precioUnit * item.qty;
-                        const precioUnitUSD = precioUnit / exchangeRate.value;
-                        let estado = '', color = '', bgStyle = '';
-                        if (item.pendiente) { estado = 'PENDIENTE'; color = 'var(--info)'; bgStyle = 'background: var(--info-light);'; }
-                        else if (prov.cotiza.includes(item.id)) { estado = 'COTIZADO'; color = 'var(--success)'; }
-                        else { estado = 'NO COTIZADO'; color = 'var(--danger)'; bgStyle = 'background: rgba(220,38,38,0.05);'; }
-                        const opcionalTag = item.opcional ? '<span style="font-size: 0.7rem; color: var(--info);"> (OPC)</span>' : '';
-                        return `<tr style="${bgStyle}"><td style="font-weight: 700;">${item.id}</td><td>${item.name}${opcionalTag}</td><td style="text-align: center; font-weight: 600;">${item.qty}</td><td style="text-align: right; font-family: monospace;">${item.pendiente ? '-' : '$ ' + precioUnit.toLocaleString('es-AR')}</td><td style="text-align: right; font-family: monospace; color: var(--info);">${item.pendiente ? '-' : 'U$S ' + precioUnitUSD.toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td><td style="text-align: right; font-family: monospace; font-weight: 600;">${item.pendiente ? '-' : '$ ' + totalARS.toLocaleString('es-AR')}</td><td style="text-align: center; color: ${color}; font-weight: 700; font-size: 0.75rem;">${estado}</td></tr>`;
-                    }).join('')}
-                </tbody><tfoot style="background: var(--bg); font-weight: 800;">
-                    <tr style="border-top: 3px solid var(--primary);"><td colspan="5" style="padding: 15px 10px; text-align: right; font-size: 1.1rem;">TOTALES:</td><td style="padding: 15px 10px; text-align: right; font-size: 1.2rem; color: var(--success);">$ ${prov.precio.toLocaleString('es-AR')}</td><td style="padding: 15px 10px; text-align: center; font-size: 1rem;">${prov.itemsCotizados}/${prov.totalItems}</td></tr>
-                    <tr><td colspan="5" style="text-align: right; color: var(--info);">Total USD:</td><td colspan="2" style="text-align: center; color: var(--info); font-family: monospace; font-size: 1.1rem;">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td></tr>
-                </tfoot></table>
-                <div class="print-summary">
-                    <div><strong style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Resumen</strong><div style="margin-top: 8px;"><div><strong>Ítems Cotizados:</strong> ${prov.itemsCotizados} de ${prov.totalItems}</div><div><strong>Calidad:</strong> ${prov.calidad}</div><div><strong>Marca:</strong> ${prov.marca}</div><div><strong>Ranking:</strong> #${prov.rank} (Score: ${prov.scorePct})</div></div></div>
-                    <div><strong style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Faltantes</strong><div style="margin-top: 8px; color: var(--danger);"><div><strong>Ítems sin cotizar:</strong> ${prov.faltantes.join(', ')}</div><div style="margin-top: 4px; font-size: 0.9rem;">${prov.pendientes}</div></div>${diff > 0 ? `<div style="margin-top: 12px; color: var(--warning);"><strong>Diferencia vs mejor:</strong> +$${diff.toLocaleString('es-AR')} ARS (+${diffPct}%)</div>` : '<div style="margin-top: 12px; color: var(--success);"><strong>✓ MEJOR PRECIO</strong></div>'}</div>
-                </div>
-                <div class="print-footer"><strong>Cotización generada por COMPARUM - Marcelo Escudero</strong><br>Sistema de Comparación COMPARUM | Tipo de cambio: $${exchangeRate.value} ARS/USD<br>Fecha: ${new Date().toLocaleDateString('es-AR')}</div>
-            </div>`;
-    }).join('');
-}
-
-function renderPrintComparative() {
-    const container = document.getElementById('printComparativeSection');
-    const activeItems = items.filter(i => !i.inactive);
-    const minPrecio = Math.min(...providersData.map(p => p.precio));
-    let fullHtml = `<div class="print-comparative" id="print-comparative-full">
-        <div class="print-header"><h1>COMPARATIVA COMPLETA DE PROVEEDORES</h1><div class="subtitle">Marcelo Escudero - COMPARUM</div><div class="contact">Fecha: ${new Date().toLocaleDateString('es-AR')} | TC: $${exchangeRate.value} ARS/USD</div></div>
-        <table class="comp-table"><thead><tr><th>Material</th>${providersData.map(p => `<th class="${p.isWinner ? 'winner-col' : ''}">${p.razonSocial}<br><span style="font-size:0.7rem; font-weight:400;">${p.nombreFantasia}</span></th>`).join('')}</tr></thead><tbody>
-            ${activeItems.map(item => `<tr><td><strong>${item.name}</strong><div style="font-size:0.7rem; color:#666;">Cant: ${item.qty}${item.opcional ? ' (OPC)' : ''}${item.pendiente ? ' (PEND)' : ''}</div></td>${providersData.map(prov => {
-                if (item.pendiente) return '<td style="color:var(--info); font-size:0.75rem;">⏳ PEND</td>';
-                if (prov.cotiza.includes(item.id)) { const price = prov.preciosItems[item.id] || preciosBase[item.id] || 0; return `<td style="font-family:monospace; font-size:0.8rem;">$${price.toLocaleString('es-AR')}<br><span style="color:var(--info); font-size:0.7rem;">U$S ${(price/exchangeRate.value).toFixed(2)}</span></td>`; }
-                return '<td style="color:var(--danger); font-size:0.75rem;">✗ N/C</td>';
-            }).join('')}</tr>`).join('')}
-            <tr style="background: var(--bg); font-weight: 800;"><td style="text-align: right; padding: 12px;">TOTAL ARS:</td>${providersData.map(prov => `<td style="font-family:monospace; font-size: 1rem; color: ${prov.precio === minPrecio ? 'var(--success)' : 'var(--text)'};">$${prov.precio.toLocaleString('es-AR')}</td>`).join('')}</tr>
-            <tr style="background: var(--bg);"><td style="text-align: right;">TOTAL USD:</td>${providersData.map(prov => `<td style="font-family:monospace; color: var(--info);">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits:2, maximumFractionDigits:2})}</td>`).join('')}</tr>
-            <tr style="background: var(--bg);"><td style="text-align: right;">ÍTEMS:</td>${providersData.map(prov => `<td>${prov.itemsCotizados}/${prov.totalItems}</td>`).join('')}</tr>
-        </tbody></table><div class="print-footer">COMPARUM - Sistema de Comparación de Cotizaciones</div>
-    </div>`;
-
-    let summaryHtml = `<div class="print-comparative" id="print-comparative-summary">
-        <div class="print-header"><h1>RESUMEN EJECUTIVO - COMPARATIVA</h1><div class="subtitle">Marcelo Escudero - COMPARUM</div></div>
-        <table class="items-table"><thead><tr><th>#</th><th>Proveedor</th><th>Score</th><th>Ítems</th><th>Calidad</th><th>Marca</th><th>Precio ARS</th><th>Precio USD</th><th>Vs Mejor</th></tr></thead><tbody>
-            ${providersData.map(prov => {
-                const diff = prov.precio - minPrecio;
-                const diffPct = ((diff / minPrecio) * 100).toFixed(1);
-                return `<tr style="${prov.isWinner ? 'background: rgba(5,150,105,0.05);' : ''}"><td style="font-weight: 800; font-size: 1.1rem;">${prov.rank}</td><td><strong>${prov.razonSocial}</strong><div style="font-size: 0.75rem; color: #666;">${prov.nombreFantasia}</div></td><td style="font-weight: 800; color: var(--primary); font-size: 1.1rem;">${prov.scorePct}</td><td>${prov.itemsCotizados}/${prov.totalItems}</td><td>${prov.calidad}</td><td>${prov.marca}</td><td style="font-family: monospace; font-weight: 700;">$${prov.precio.toLocaleString('es-AR')}</td><td style="font-family: monospace; color: var(--info);">U$S ${(prov.precio/exchangeRate.value).toLocaleString('es-AR', {minimumFractionDigits:2, maximumFractionDigits:2})}</td><td style="color: ${diff===0 ? 'var(--success)' : 'var(--warning)'}; font-weight: 700;">${diff===0 ? '✓ MEJOR' : `+${diffPct}%`}</td></tr>`;
-            }).join('')}
-        </tbody></table>
-        <div style="margin-top: 24px; padding: 16px; background: var(--bg); border-radius: 8px; font-size: 0.875rem; color: var(--text-secondary);">
-            <strong>Metodología de Ranking:</strong> Score ponderado = (Cumplimiento × 50%) + (Calidad × 25%) + (Precio × 25%). Calidad: Premium=100, Standard-Plus=80, Standard=60. Precio normalizado respecto al mejor.
-        </div>
-        <div class="print-footer">COMPARUM - ${new Date().toLocaleDateString('es-AR')}</div>
-    </div>`;
-    container.innerHTML = fullHtml + summaryHtml;
-}
-
-// ======================= UTILIDADES =======================
-function switchTab(tabId, btn) { document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById(tabId).classList.add('active'); btn.classList.add('active'); }
-function toggleTheme() { const html = document.documentElement; const current = html.getAttribute('data-theme'); html.setAttribute('data-theme', current === 'light' ? 'dark' : 'light'); localStorage.setItem('theme', html.getAttribute('data-theme')); }
-function showNotification(message) { const notif = document.createElement('div'); notif.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: var(--success); color: white; padding: 16px 24px; border-radius: 12px; font-weight: 600; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease;'; notif.textContent = message; document.body.appendChild(notif); setTimeout(() => { notif.style.animation = 'slideOut 0.3s ease'; setTimeout(() => notif.remove(), 300); }, 3000); }
-async function refreshExchangeRate() { const label = document.getElementById('usdSourceLabel'); try { const r = await fetch('https://dolarapi.com/v1/dolares/oficial', { cache: 'no-store' }); const j = await r.json(); if (j && j.venta) { document.getElementById('exchangeRateInput').value = j.venta; exchangeRate.value = parseFloat(j.venta); localStorage.setItem('exchangeRate', j.venta); if (label) label.textContent = 'Fuente: dolarapi.com / oficial'; } } catch (e) { if (label) label.textContent = 'Fuente: manual'; } updateExchangeRate(); }
-
-const savedTheme = localStorage.getItem('theme') || 'dark';
-document.documentElement.setAttribute('data-theme', savedTheme);
-const style = document.createElement('style');
-style.textContent = `@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } } @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }`;
-document.head.appendChild(style);
-
-init();
-</script>
-</body>
-</html>
+    { key: 'premium', rank: 4, razonSocial: 'ELECTRO PER
